@@ -35,7 +35,7 @@ $subdirectories = "/var/www/subdirectories_for_interface";
 
 <head>
 <title>
-fRNAkenstein - THCL Cruncher
+fRNAkenstein - DiffExpress
 </title>
 <link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
@@ -57,11 +57,11 @@ fRNAkenstein - THCL Cruncher
 <legend>
 <h3>
 <!img src="images/favicon.png" alt="fRNAk" width="24" height="24"> 
-fRNAkenstein - THCL Cruncher
+fRNAkenstein - DiffExpress
 <!img src="images/favicon.png" alt="fRNAk" width="24" height="24">
 </h3>
 </legend>
-<form id='submitform' onsubmit="return valthisform(this);" action='/thcl_response.php' method='get' target='formresponse'>
+<form id='submitform' onsubmit="return valthisform(this);" action='about:blank' method='get' target='formresponse'>
 
 
 <input type='hidden' name='submitted' id='submitted' value='1'/>
@@ -83,20 +83,24 @@ fRNAkenstein - THCL Cruncher
 <script language="javascript">
 function valthisform()
 {
-	var checkboxs=document.getElementsByName("fqfilename[]");
+	var controlcheckboxs=document.getElementsByName("controlfilename[]");
+	var expcheckboxs=document.getElementsByName("expfilename[]");
 	var okay=false;
-	for(var i=0,l=checkboxs.length;i<l;i++)
+	for(var i=0,l=controlcheckboxs.length;i<l;i++)
 	{
-		if(checkboxs[i].checked)
+		for(var ii=0,ll=expcheckboxs.length;ii<ll;ii++)
 		{
-	    okay=true;
+			if(controlcheckboxs[i].checked && expcheckboxs[ii].checked)
+			{
+	   			okay=true;
+			}
 		}
 	}
 	if(okay){
 		document.getElementById('crunch').disabled = 1
-		alert("Running THCL on Data!");
+		alert("Running DiffExpress on Data!");
 	}
-	else alert("Please select a library!");
+	else alert("Please select both libraries!");
 	return okay;
 }
 
@@ -112,74 +116,35 @@ function valthisform()
 <td valign="top" style="padding-top:12px;padding-left:8px;width:300px">
 
 <!--
-################################################
-# Create Checkboxes for fastq files (lib nums) #
-################################################
+##################################################
+# Create Checkboxes for library files (lib nums) #
+##################################################
 -->
 
 <div class='container'>
 
 <?php
-$fqfiles = scandir("$subdirectories/fastq_to_be_crunched");
+$controllibs = scandir("$subdirectories/fastq_to_be_crunched");
 
 # Sorts files by "natural human sorting" such that:
 # 1.ext                       1.ext
 # 10.ext     ==becomes==>     2.ext
 # 2.ext                       10.ext 
-if(!empty($fqfiles))
+if(!empty($controllibs))
 {
-  natsort($fqfiles);
+  natsort($controllibs);
 }
 
-echo "<h4>Choose library number(s):</h4>";
-foreach($fqfiles as $fqfile)
+echo "<h4>Choose control library number(s):</h4>";
+foreach($controllibs as $library)
 {
-  # Modifying arrays while 'foreach' iterating is broken in php
-  # -> It buffers the array at the foreach call and iterates over 
-	# -> potentially old or modified data (bad, php!)
-  # This double checks that the element is in the new fqfiles array 
-	# to fix this minor annoying problem...
-  if (($key = array_search($fqfile, $fqfiles)) !== false) 
-	{
-	  $doublestranded = 0;
-	  if ($fqfile !== "." and $fqfile !== "..")
-	  { 
-	    $librarynum = "";
-	    $libpattern = "/^s*(\d*).*/";
-	    preg_match($libpattern, $fqfile, $matches);
-	    $librarynum = $matches[1];
-	  
-	    foreach ($fqfiles as $fqfile2)
-	    {
-				if ($fqfile != "." and $fqfile != ".." and $fqfile2 != "." and $fqfile2 != "..")
-	  	  { 
-		    	$librarynum2 = "";
-		    	$libpattern = "/^s*(\d*).*/";
-					preg_match($libpattern, $fqfile2, $matches2);
-		    	$librarynum2 = $matches2[1];
-	
-				  if(($librarynum2 == $librarynum) and ($fqfile !== $fqfile2))
-				  {
-						# Remove double stranded results from list
-						if (($key = array_search($fqfile, $fqfiles)) !== false) 
-						{
-							$key2 = array_search($fqfile2, $fqfiles);
-				 		  	unset($fqfiles[$key]);
-							unset($fqfiles[$key2]);
-						}	      	
-					  $doublestranded = 1;
-
-				    echo "<input type=\"checkbox\" name=\"fqfilename[]\" value=\"$fqfile&$fqfile2\">$librarynum (double stranded)<br>";
-
-				  } 
-		  	}
-			}
-
-	    if ($doublestranded == 0)
-	    {
-				echo "<input type=\"checkbox\" name=\"fqfilename[]\" value=\"$fqfile\">$librarynum<br>";
-	    }
-	  }
+  if ($library !== "." and $library !== "..")
+  { 
+    $librarynum = "";
+    $libpattern = "/^s*(\d*).*/";
+    preg_match($libpattern, $library, $matches);
+    $librarynum = $matches[1];
+    echo "<input type=\"checkbox\" name=\"controlfilename[]\" value=\"$library\">$librarynum<br>";
   }
 } 
 
@@ -282,6 +247,47 @@ foreach ($fafiles as $fafile)
 <form action="index.html">
     <input align="bottom" type="submit" value="Return to Menu">
 </form>
+</td>
+
+<!--
+##################################################
+# Create Checkboxes for library files (lib nums) #
+##################################################
+-->
+<td valign="top" style="padding-top:12px;padding-left:8px;width:300px">
+<div class='container'>
+
+<?php
+$explibs = scandir("$subdirectories/fastq_to_be_crunched");
+
+# Sorts files by "natural human sorting" such that:
+# 1.ext                       1.ext
+# 10.ext     ==becomes==>     2.ext
+# 2.ext                       10.ext 
+if(!empty($explibs))
+{
+  natsort($explibs);
+}
+
+echo "<h4>Choose experimental library number(s):</h4>";
+foreach($explibs as $explibrary)
+{
+  if ($explibrary !== "." and $explibrary !== "..")
+  { 
+    $librarynum = "";
+    $libpattern = "/^s*(\d*).*/";
+    preg_match($libpattern, $explibrary, $matches);
+    $librarynum = $matches[1];
+    echo "<input type=\"checkbox\" name=\"expfilename[]\" value=\"$explibrary\">$librarynum<br>";
+  }
+} 
+
+echo "</select>";
+
+?>
+
+</div>
+
 </td>
 
 <!--

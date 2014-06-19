@@ -19,6 +19,18 @@ $subdirectories = "/var/www/subdirectories_for_interface";
 
 $logdirectory = "$subdirectories/logs";
 
+
+/*$searchbox = $_GET['fname'];
+
+if ($searchbox != "")
+{
+  $logs = scandir($logdirectory);
+  var_dump($logs);
+}
+else {
+  echo "OOPS!";
+*/
+
 if(empty($_GET['log'])){
 	exit("<h4>Error 6: No log file selected</h4>");
 }

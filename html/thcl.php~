@@ -94,7 +94,7 @@ function valthisform()
 	}
 	if(okay){
 		document.getElementById('crunch').disabled = 1
-		alert("Running THCL on Data!");
+		alert("Submitted processing request!");
 	}
 	else alert("Please select a library!");
 	return okay;

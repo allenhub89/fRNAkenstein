@@ -50,7 +50,7 @@ Contact Information
 
 <table height="90%" style="margin: 0px;">
 <tr>
-<td valign="middle" bgcolor="#d0eace" style="border:outset;padding-top:24px;padding-bottom:24px;padding-left:24px;padding-right:24px;width=10px">
+<td valign="middle" bgcolor="#d0eace" style="padding-top:24px;padding-bottom:24px;padding-left:24px;padding-right:24px;width=10px">
 
 fRNAkenstein pipeline:<br>
 A pipeline for sequencing via the Tuxedo suite <br>
