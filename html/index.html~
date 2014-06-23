@@ -50,10 +50,11 @@ Welcome to fRNAkenstein!
 
 <table height="90%" style="margin: 0px;">
 <tr>
-<td colspan="3" valign="middle" bgcolor="#d0eace" style="border:outset;padding-top:24px;padding-bottom:24px;padding-left:24px;padding-right:12px;width=500px">
+<td colspan="3" valign="middle" bgcolor="#d0eace" style="border:outset;padding-top:24px;padding-bottom:24px;padding-left:24px;padding-right:12px;">
 
-"One man's life or death were but a small price to pay for the acquirement of the knowledge which I sought, for the dominion I
-should acquire and transmit over the elemental foes of our race."
+"One man's life or death were but a small price to pay for the <br>
+acquirement of the knowledge which I sought, for the dominion I should <br>
+acquire and transmit over the elemental foes of our race."
 
 </td>
 </tr>
@@ -63,18 +64,20 @@ should acquire and transmit over the elemental foes of our race."
 <a href="thcl.php" class="fRNAkbutton">Tophat & Cufflinks</a>
 
 </td>
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px;">
-"Life, although it may only be an accumulation of anguish, is dear to me, and I will defend it."
+<td valign="middle"  style="padding-top:12px;padding-left:8px;">
+"Life, although it may only be an accumulation of <br>
+anguish, is dear to me, and I will defend it."
 </td>
 </tr>
 
 <tr>
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
-<a href="#" class="fRNAkbutton">DiffExpress</a>
+<a href="diffexpress.php" class="fRNAkbutton">DiffExpress</a>
 </td>
 
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px;">
-"...learn from my miseries, and do not seek to increase your own."
+<td valign="middle"  style="padding-top:12px;padding-left:8px;">
+"...learn from my miseries, and do not seek to <br>
+increase your own."
 </td>
 </tr>
 
@@ -82,16 +85,18 @@ should acquire and transmit over the elemental foes of our race."
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
 <a href="#" class="fRNAkbutton">Visualize Data</a>
 
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px;">
-"There is something at work in my soul, which I do not understand."
+<td valign="middle"  style="padding-top:12px;padding-left:8px;">
+"There is something at work in my soul, which I <br>
+do not understand."
 </td>
 
 <tr>
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
 <a href="log_view.php" class="fRNAkbutton">View Logs</a>
 
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px;">
-"Thus strangely are our souls constructed, and by slight ligaments are we bound to prosperity and ruin."
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:4">
+"Thus strangely are our souls constructed, and <br>
+by slight ligaments are we bound to prosperity and ruin."
 </td>
 </tr>
 
@@ -99,8 +104,10 @@ should acquire and transmit over the elemental foes of our race."
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
 <a href="contact.html" class="fRNAkbutton">About & Contact</a>
 
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px;">
-"It is true, we shall be monsters, cut off from all the world; but on that account we shall be more attached to one another."
+<td valign="middle"  style="padding-top:12px;padding-left:8px;">
+"It is true, we shall be monsters, cut off from all <br>
+the world; but on that account we shall be more <br>
+attached to one another."
 </td>
 </tr>
 

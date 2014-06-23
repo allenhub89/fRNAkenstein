@@ -19,9 +19,9 @@
 #   --fastq_to_be_crunched/        #
 #   --fasta_directory/             #
 #   --annotation_directory/        #
-#   --unzipped_fastq_directory/    #
+#   --temp_output/                 #
 #   --bash_scripts/                #
-#   --output_directory/            #
+#   --thcl_output/                 #
 #   --logs/                        #
 #                                  #
 # Modify $subdirectories to change #

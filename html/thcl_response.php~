@@ -7,9 +7,9 @@
 #   --fastq_to_be_crunched/        #
 #   --fasta_directory/             #
 #   --annotation_directory/        #
-#   --unzipped_fastq_directory/    #
+#   --temp_output/                 #
 #   --bash_scripts/                #
-#   --output_directory/            #
+#   --thcl_output/                 #
 #   --logs/                        #
 #                                  #
 # Modify $subdirectories to change #
@@ -92,20 +92,21 @@ echo "<b>Your run ID is: </b> $mytimeid<br><br>";
 $logfile = "$subdirectories/logs/$mytimeid.thcl.log";
 $logoutput = "Bash commands...\n";
 
+# Temp output path
+$temppath = "$subdirectories/temp_output";
+
 # For every library selected:
 foreach($fqarray as $fqoriginal) {
 
 	# Split for double stranded
 	$fqdoublestranded = explode("&", $fqoriginal);
-	# don't like this but it needs to be done
+	# don't like this but it needs to be done for clarity below
 	$fq = $fqdoublestranded[0];
 	
 	# Check if fastq file is zipped
 	if (preg_match("/\.gz/", $fq)!=1 ){
 		exit("Error 5: Fastq file not gzipped (.gz)");
 	} else {
-		
-		$unzippedpath = "$subdirectories/unzipped_fastq_directory";
 
 		# If double stranded, path is equal to both paths delimited by a space
 		if (count($fqdoublestranded)==2) {
@@ -113,11 +114,13 @@ foreach($fqarray as $fqoriginal) {
 			$fqpath2strand = "$subdirectories/fastq_to_be_crunched/$fqdoublestranded[1]";
 
 			if(preg_match("/\.gz/", $fqpath)==1 and preg_match("/\.gz/", $fqpath2strand)==1){
-				system("mv $fqpath $unzippedpath/$fqdoublestranded[0]");
-				system("mv $fqpath2strand $unzippedpath/$fqdoublestranded[1]");
-				system("gunzip $unzippedpath/*.gz");
-				$fqpath = preg_replace("/.gz/","",$fq);
-				$fqpath2strand = preg_replace("/.gz/","",$fq);
+				system("mv $fqpath $temppath/$fqdoublestranded[0]");
+				system("mv $fqpath2strand $temppath/$fqdoublestranded[1]");
+				system("gunzip $temppath/*.gz");
+				$fq = preg_replace("/.gz/","",$fq);
+				$fq2 = preg_replace("/.gz/","",$fqdoublestranded[1]);	
+				$fqpath = "$temppath/$fq";
+				$fqpath2strand = "$temppath/$fq2";
 				$fqpath = $fqpath." ".$fqpath2strand;
 			}
 		}
@@ -127,10 +130,10 @@ foreach($fqarray as $fqoriginal) {
 
 			if(preg_match("/\.gz/", $fqpath)==1)
 			{
-				system("mv $fqpath $unzippedpath/");
-				system("gunzip $unzippedpath/$fq");
+				system("mv $fqpath $temppath/");
+				system("gunzip $temppath/$fq");
 				$fq = preg_replace("/.gz/","",$fq);
-				$fqpath = "$unzippedpath/$fq";
+				$fqpath = "$temppath/$fq";
 
 			}
 		}
@@ -143,8 +146,8 @@ foreach($fqarray as $fqoriginal) {
 		$library = preg_replace("/(_[a-zA-Z0-9]*)+(\.[a-zA-Z0-9]*)+/","",$fq);
 
 		# Generate location for output files
-		$thoutputfile = "$subdirectories/output_directory/library_$library/tophat_out";
-		$cloutputfile = "$subdirectories/output_directory/library_$library";
+		$thoutputfile = "$temppath/library_$library/tophat_out";
+		$cloutputfile = "$temppath/library_$library";
 
 		# Generate commands for TH and CL
 		$thcommand = "tophat -p $procs -o $thoutputfile $fapath $fqpath";
@@ -155,7 +158,7 @@ foreach($fqarray as $fqoriginal) {
 		$makedirs = "mkdir -p $cloutputfile && mkdir -p $thoutputfile";
 
 		# Append library commands to the output command string
-		$singleoutputcommand = "$makedirs && $thcommand >> $logfile 2>&1 && $clcommand >> $logfile 2>&1\n";
+		$singleoutputcommand = "$makedirs\n$thcommand >> $logfile 2>&1 && $clcommand >> $logfile 2>&1\n";
 		$outputcommands = $outputcommands.$singleoutputcommand;
 	
 		# Build log output
@@ -164,14 +167,23 @@ foreach($fqarray as $fqoriginal) {
 }
 
 # Create bash file output directory
-$bashfile = "$subdirectories/bash_scripts/run_$mytimeid.sh";
+$bashfile = "$subdirectories/bash_scripts/run_$mytimeid.thcl.sh";
 
 # Append to log output (TH and CL will redirect stderr to log file)
-$logoutput = $logoutput."Tophat & Cufflinks output...\n";
+$logoutput = $logoutput."THCL output...\n";
+
+# Move temp files to output directory only after the library has been crunched	
+# and add to the commands file	
+$thclpath = "$subdirectories/thcl_output";
+$mvcommand = "mv -f $temppath/library_* $thclpath/ >> $logfile 2>&1";
+$outputcommands = $outputcommands.$mvcommand;
 
 # Write files
 file_put_contents($logfile, $logoutput);
 file_put_contents($bashfile, $outputcommands, LOCK_EX);
+
+# Test output of commands
+# echo $outputcommands;
 
 # Execute bash file 
 #system("bash $bashfile");
@@ -188,7 +200,9 @@ file_put_contents($bashfile, $outputcommands, LOCK_EX);
 <script language="javascript">
 function reloader()
 {	
+	/* Reload window */
 	parent.location.reload();
+	/* Set iFrame to empty */
 	window.location.assign("about:blank");
 
 }

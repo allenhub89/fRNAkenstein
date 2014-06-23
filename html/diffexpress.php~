@@ -61,7 +61,7 @@ fRNAkenstein - DiffExpress
 <!img src="images/favicon.png" alt="fRNAk" width="24" height="24">
 </h3>
 </legend>
-<form id='submitform' onsubmit="return valthisform(this);" action='about:blank' method='get' target='formresponse'>
+<form id='submitform' onsubmit="return valthisform(this);" action='/diffexpress_response.php' method='get' target='formresponse'>
 
 
 <input type='hidden' name='submitted' id='submitted' value='1'/>
@@ -97,7 +97,7 @@ function valthisform()
 		}
 	}
 	if(okay){
-		document.getElementById('crunch').disabled = 1
+		/*document.getElementById('crunch').disabled = 1*/
 		alert("Running DiffExpress on Data!");
 	}
 	else alert("Please select both libraries!");
@@ -123,8 +123,10 @@ function valthisform()
 
 <div class='container'>
 
+<h4>Control Condition:</h4> <input type="text" name="controlcondition"><br>
+
 <?php
-$controllibs = scandir("$subdirectories/fastq_to_be_crunched");
+$controllibs = scandir("$subdirectories/thcl_output");
 
 # Sorts files by "natural human sorting" such that:
 # 1.ext                       1.ext
@@ -141,7 +143,7 @@ foreach($controllibs as $library)
   if ($library !== "." and $library !== "..")
   { 
     $librarynum = "";
-    $libpattern = "/^s*(\d*).*/";
+    $libpattern = "/\D*(.*)/";
     preg_match($libpattern, $library, $matches);
     $librarynum = $matches[1];
     echo "<input type=\"checkbox\" name=\"controlfilename[]\" value=\"$library\">$librarynum<br>";
@@ -151,6 +153,8 @@ foreach($controllibs as $library)
 echo "</select>";
 
 ?>
+
+<br>
 
 </div>
 
@@ -231,8 +235,25 @@ foreach ($fafiles as $fafile)
 
 </div>
 
-<br>
+<!--
+#################
+# Analysis Name #
+#################
+-->
 
+<h4>Analysis Name:</h4> <input type="text" name="analysisname"><br>
+
+<!--
+#######################
+# Annotation Selector #
+#######################
+-->
+
+<h4> Annotation Type: </h4>
+<input type="radio" name="annotationtype" value="ensembl" checked>Ensembl 
+<input type="radio" name="annotationtype" value="ncbi">NCBI <br>
+
+<br>
 <!--
 ###########################
 # Submit and Menu Buttons #
@@ -257,8 +278,10 @@ foreach ($fafiles as $fafile)
 <td valign="top" style="padding-top:12px;padding-left:8px;width:300px">
 <div class='container'>
 
+<h4>Experimental Condition:</h4> <input type="text" name="expcondition"><br>
+
 <?php
-$explibs = scandir("$subdirectories/fastq_to_be_crunched");
+$explibs = scandir("$subdirectories/thcl_output");
 
 # Sorts files by "natural human sorting" such that:
 # 1.ext                       1.ext
@@ -275,7 +298,7 @@ foreach($explibs as $explibrary)
   if ($explibrary !== "." and $explibrary !== "..")
   { 
     $librarynum = "";
-    $libpattern = "/^s*(\d*).*/";
+    $libpattern = "/\D*(.*)/";
     preg_match($libpattern, $explibrary, $matches);
     $librarynum = $matches[1];
     echo "<input type=\"checkbox\" name=\"expfilename[]\" value=\"$explibrary\">$librarynum<br>";
