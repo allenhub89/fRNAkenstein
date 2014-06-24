@@ -252,8 +252,147 @@ foreach($libs as $lib)
 # R Programs Section #
 ######################
 
+  
 
+#########BaySeqVariables################## 
+$notNullModel1 = ""; 
+$notNullModel2 = ""; 
+$nullModel = "";
 
+################Generate DESeq2 Variables###################### 
+$controlcount = 0; 
+$expcount = 0; 
+  
+foreach ($controllibs as $library) #when we make the list, we want to add the comma after each entry except the last one 
+{ 
+	if ($list1Count < count($controllibs)) 
+	{ 
+		$notNullModel1 = $notNullModel1."1".","; 
+	}
+	else #when we make the list, we want to add the comma after each entry except the last one 
+	{ 
+		$notNullModel1 = $notNullModel1."1"; 	      
+	} 
+
+	$controlcount += 1; 
+} 
+
+foreach ($explibs as $library) 
+{ 
+	if ($list2Count < count($explibs)) 
+	{ 
+		$notNullModel2 = $notNullModel2."2".","; 
+	} 
+	else
+	{ 
+		$notNullModel2 = $notNullModel2."2"; 
+	} 
+
+	$expcount += 1; 
+} 
+
+########################################### 
+
+#####GenerateBaySeqVariableValues########### 
+
+$count = 0; 
+
+foreach ($explibs as $library) 
+{ 
+	if ($count < count($libs)) 
+	{ 
+		$nullModel = $nullModel . "1" . ",";    
+	} 
+	else
+	{ 
+		$nullModel = $nullModel . "1";   
+	}    
+	$count += 1; 
+} 
+####################################### 
+
+#############DESeq2 Variables ###################### 
+
+$greparray = ""; 
+
+####################################################
+
+$count = 0; 
+foreach ($explibs as $library) 
+{ 
+   
+	if ($count == 0) 
+	{ 
+		$greparray = "(grep(\"$library\",list.files(\"$htseqpath\"),value=TRUE))"; 
+	} 
+	else
+	{ 
+		$greparray .= ",(grep(\"$library\",list.files(\"$htseqpath\"),value=TRUE))"; 
+	} 
+
+	$count += 1; 
+} 
+
+#################Print Everything Out ################33 
+open(OUT, ">>$RcommandFile"); 
+print OUT "source(\"http://bioconductor.org/biocLite.R\") \n"; 
+print OUT "biocLite() \n"; 
+print OUT "biocLite(\"baySeq\") \n"; 
+print OUT "biocLite(\"DESeq2\") \n"; 
+print OUT "biocLite(\"edgeR\") \n"; 
+print OUT "library(DESeq2) \n"; 
+print OUT "library(baySeq) \n"; 
+print OUT "library(edgeR) \n"; 
+
+######################BaySeq Commands############################# 
+print OUT "all = read.delim(\"$analysisName/all_counts.txt\", header=TRUE, sep=\"\\t\")\n"; 
+print OUT "lib <- c($list1,$list2) \n"; 
+print OUT "replicates <- c($notNullModel1,$notNullModel2) \n"; 
+print OUT "groups <- list(NDE = c($nullModel), DE = c($notNullModel1,$notNullModel2))\n"; 
+print OUT "cname <- all[,1] \n"; 
+print OUT "all <- all[,-1] \n"; 
+print OUT "all = as.matrix(all) \n"; 
+print OUT "CD <- new(\"countData\", data = all, replicates = replicates, libsizes = as.integer(lib), groups = groups) \n"; 
+print OUT "library(parallel) \n"; 
+print OUT "CD\@annotation <- as.data.frame(cname) \n"; 
+print OUT "cl <- NULL \n"; 
+print OUT "CDP.NBML <- getPriors.NB(CD, samplesize = 1000, estimation = \"QL\", cl = cl) \n"; 
+print OUT "CDPost.NBML <- getLikelihoods.NB(CDP.NBML, pET = 'BIC', cl = cl) \n"; 
+print OUT "CDPost.NBML\@estProps \n";  
+print OUT "topCounts(CDPost.NBML, group=2) \n"; 
+print OUT "NBML.TPs <- getTPs(CDPost.NBML, group=2, TPs = 1:100) \n"; 
+print OUT "topCounts(CDPost.NBML, group=2)\n"; 
+print OUT "blah <- topCounts(CDPost.NBML,group=\"DE\",FDR=1) \n"; 
+print OUT "write.csv(blah, file=\"$analysisName/bayseq_de_analyzed_dataset_$analysisName.csv\") \n"; 
+
+###################DESEQ2 Commands############################ 
+print OUT "directory <- \"$analysisName/$HTSeqOut\" \n"; 
+print OUT "sampleFiles <- c($arrayOfFilesToGrep) \n";  #CREATE THE DESEQ2 object 
+print OUT "sampleCondition <- c(rep(\"C\",$list1Count),rep(\"T\",$list2Count)) \n"; 
+print OUT "sampleTable<- data.frame(sampleName=sampleFiles, fileName=sampleFiles, condition=sampleCondition) \n"; 
+print OUT "ddsHTSeq<-DESeqDataSetFromHTSeqCount(sampleTable=sampleTable, directory=directory, design=~condition) \n"; 
+print OUT "dds<-DESeq(ddsHTSeq) \n"; 
+print OUT "res<-results(dds) \n"; 
+print OUT "res<-res[order(res\$padj),] \n"; 
+print OUT "head(res) \n"; 
+print OUT "write.table (as.data.frame(res), file=\"$analysisName/results_deseq2.txt\") \n"; 
+############################################################## 
+
+#######################EdgeR Commands################################ 
+print OUT "library(edgeR) \n"; 
+print OUT "group <- c($notNullModel1,$notNullModel2) \n"; 
+print OUT "y <- DGEList(counts=all, group= group) \n"; 
+print OUT "dge <- DGEList(counts=y, group=group, genes = cname ) \n";  #make the R object from the list of counts and the annotation                                #vector from previous analyses 
+print OUT "dge <- calcNormFactors(dge) \n"; 
+print OUT "dge = estimateCommonDisp(dge) \n"; 
+print OUT "de.com = exactTest(dge)   \n"; 
+print OUT "topTags(de.com)  \n"; 
+print OUT "goodList = topTags(de.com, n=\"good\") \n"; 
+print OUT "write.table (as.data.frame(goodList), file=\"$analysisName/edgeR.txt\") \n"; 
+##################################################################### 
+close(OUT); 
+system("R --vanilla <$RcommandFile"); 
+} 
 
 $commands = $commands.$cmcommand.$cdcommand.$htseqcommand;
 
