@@ -82,7 +82,7 @@ $(document).ready(function(){
 			}
 			else {
 				alert("Library \'" + library + "\' is not in the archive or already added as a separate condition.");
-				$("#mainframe").attr("src", "http://www.google.com/");
+				$("#formresponse").attr("src", "http://www.google.com");
 
 			}
 		}

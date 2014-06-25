@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+$("#chk").click(function(){
+	var $ctrl = $('<input/>').attr({ type: 'checkbox', name:'chk[]'}).addClass("chk");
+	$("#holder").append($ctrl);
+	$("#holder").append("<br>");
+});
+</script>
+</head>
+
+<body>
+<div style="display:inline">
+<input type="button" id="chk" value="Add CheckBox" style="" />
+</div>
+<div id="holder">
+
+
+</div>
+</body>
+
+</html>

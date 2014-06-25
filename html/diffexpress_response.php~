@@ -147,6 +147,26 @@ $logfile = "$subdirectories/logs/$mytimeid.diffexp.log";
 $commands = "";
 $commands = "mkdir -p $analysispath\n";
 
+##########################
+# Normalize Array inputs #
+##########################
+foreach ($controllibs as &$lib)
+{
+
+  echo $lib;
+  echo "<br>";
+}
+
+foreach ($explibs as &$lib)
+{
+
+  echo $lib;
+  echo "<br>";
+}
+  
+
+echo "<br>";
+
 #############################
 # Merge ctrl and exp arrays #
 #############################
