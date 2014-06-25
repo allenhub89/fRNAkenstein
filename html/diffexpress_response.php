@@ -18,37 +18,57 @@
 
 $subdirectories = "/var/www/subdirectories_for_interface";
 
+########################
+# Captcha Verification #
+########################
+
+require_once('recaptchalib.php');
+$privatekey = "6LfK0PUSAAAAAP_PlDXSa_jlAxw7g0W7z7qMvcNM ";
+$resp = recaptcha_check_answer ($privatekey,
+                        $_SERVER["REMOTE_ADDR"],
+                        $_POST["recaptcha_challenge_field"],
+                        $_POST["recaptcha_response_field"]);
+
+if (!$resp->is_valid) {
+echo "<script language=\"javascript\">";
+echo "parent.location.reload();";
+echo "</script>";
+
+  die ("<h4> Error 15: reCaptcha not entered correctly</h4>");
+} else {
+
+
 ############################################
 # Some error checking redundancy on inputs #
 ############################################
 
-if(empty($_GET['controlcondition'])){
+if(empty($_POST['controlcondition'])){
 	exit("<h4>Error 6: No control condition entered</h4>");
 }
-if(empty($_GET['controlfilename'])){
+if(empty($_POST['controlfilename'])){
 	exit("<h4>Error 7: No control libraries selected</h4>");
 }
-if(empty($_GET['expcondition'])){
+if(empty($_POST['expcondition'])){
 	exit("<h4>Error 8: No experimental condition entered</h4>");
 }
-if(empty($_GET['expfilename'])){
+if(empty($_POST['expfilename'])){
 	exit("<h4>Error 9: No experimental libraries selected</h4>");
 }
 
-if(empty($_GET['procs'])){
+if(empty($_POST['procs'])){
 	exit("<h4>Error 10: Number of proccessors error</h4>");
 }
-if(empty($_GET['afilename'])){
+if(empty($_POST['afilename'])){
 	exit("<h4>Error 11: No annotation file selected</h4>");
 }
-if(empty($_GET['fafilename'])){
+if(empty($_POST['fafilename'])){
 	exit("<h4>Error 12: No Fasta file selected</h4>");
 }
 
-if(empty($_GET['analysisname'])){
+if(empty($_POST['analysisname'])){
 	exit("<h4>Error 13: No analysis name entered</h4>");
 }
-if(empty($_GET['annotationtype'])){
+if(empty($_POST['annotationtype'])){
 	exit("<h4>Error 14: No annotation type selected</h4>");
 }
 
@@ -56,15 +76,15 @@ if(empty($_GET['annotationtype'])){
 # Grab values from HTML elements #
 ##################################
 
-$controlcondition = $_GET['controlcondition'];
-$controllibs = $_GET['controlfilename'];
-$expcondition = $_GET['expcondition'];
-$explibs = $_GET['expfilename'];
-$procs = htmlentities($_GET['procs']);
-$anno = htmlentities($_GET['afilename']);
-$fa = htmlentities($_GET['fafilename']);
-$analysisname = $_GET['analysisname'];
-$annotype = $_GET['annotationtype'];
+$controlcondition = $_POST['controlcondition'];
+$controllibs = $_POST['controlfilename'];
+$expcondition = $_POST['expcondition'];
+$explibs = $_POST['expfilename'];
+$procs = htmlentities($_POST['procs']);
+$anno = htmlentities($_POST['afilename']);
+$fa = htmlentities($_POST['fafilename']);
+$analysisname = $_POST['analysisname'];
+$annotype = $_POST['annotationtype'];
 
 ########################
 # Printing information #
@@ -425,6 +445,8 @@ echo $commands;# for testing
 #echo "$cmcommand<br>";
 #echo "$cdcommand"; 
 
+
+}
 ?>
 
 
