@@ -10,7 +10,13 @@
 # Version 0.10 Updated 6/18/2014     #
 ######################################
 -->
-
+<?php 
+session_start();
+if(empty($_SESSION['user_name']))
+{
+  header('Location: notloggedin.html');
+}
+?>
 <!--
 ##########
 # Header #
@@ -48,7 +54,7 @@ Welcome to fRNAkenstein!
 </h3>
 </legend>
 
-<table height="90%" style="margin: 0px;">
+<table style="margin: 0px;">
 <tr>
 <td colspan="3" valign="middle" bgcolor="#d0eace" style="border:outset;padding-top:24px;padding-bottom:24px;padding-left:24px;padding-right:12px;width:500px">
 
@@ -92,7 +98,7 @@ do not understand."
 
 <tr>
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
-<a href="log_view.php" class="fRNAkbutton">View Logs</a>
+<a href="log_view.php" class="fRNAkbutton">Status</a>
 
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
 "Thus strangely are our souls constructed, and <br>

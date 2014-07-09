@@ -23,15 +23,17 @@ if(empty($_GET['log'])){
 	exit("<h4>Error 6: No log file selected</h4>");
 }
 
-$logfile = $_GET['log'];
+$logfile = strip_tags (htmlspecialchars( escapeshellcmd($_GET['log'])));
 
 $logfilepath = "$logdirectory/$logfile";
 
 $fh = fopen("$logfilepath", 'r');
-$pageText = fread($fh, 250000);
+$pageText = fread($fh, 1000000);
 $pageText = preg_replace("/^Bash commands\.\.\./", "<b>Displaying subset of log ($logfile):</b>\n", $pageText);
 
-$pageText = preg_replace('/(Command generated:)(.*)\n/',"\n", $pageText);
+$pageText = preg_replace('/(Command generated:)(.*)\n/',"\nCommands:\n", $pageText);
+
+$pageText .= "\n <b>=== END OF LOG SUBSET ===</b>";
 
 #converts newlines to <br>
 echo nl2br($pageText);

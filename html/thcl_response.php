@@ -18,20 +18,29 @@
 
 $subdirectories = "/var/www/subdirectories_for_interface";
 
+
+session_start();
+
+if(empty($_SESSION['user_name']))
+{
+  header('Location: notloggedin.html');
+}
+
+
 ############################################
 # Some error checking redundancy on inputs #
 ############################################
 
-if(empty($_GET['fqfilename'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['fqfilename']))))){
 	exit("<h4>Error 1: No Fastq file selected</h4>");
 }
-if(empty($_GET['procs'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['procs']))))){
 	exit("<h4>Error 2: Number of proccessors error</h4>");
 }
-if(empty($_GET['afilename'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['afilename']))))){
 	exit("<h4>Error 3: No annotation file selected</h4>");
 }
-if(empty($_GET['fafilename'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['fafilename']))))){
 	exit("<h4>Error 4: No Fasta file selected</h4>");
 }
 
@@ -39,10 +48,10 @@ if(empty($_GET['fafilename'])){
 # Grab values from HTML elements #
 ##################################
 
-$fqarray = $_GET['fqfilename'];
-$procs = htmlentities($_GET['procs']);
-$anno = htmlentities($_GET['afilename']);
-$fa = htmlentities($_GET['fafilename']);
+$fqarray = strip_tags (htmlspecialchars( escapeshellcmd($_GET['fqfilename'])));
+$procs = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['procs']))));
+$anno = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['afilename']))));
+$fa = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['fafilename']))));
 
 ########################
 # Printing information #
@@ -84,6 +93,8 @@ echo "</div>";
 # Initialize output command string
 $outputcommands = "";
 
+
+
 # Generate a unique ID based on the time and echo it
 $mytimeid = date('his.m-d-Y');
 echo "<b>Your run ID is: </b> $mytimeid<br><br>";
@@ -97,6 +108,10 @@ $temppath = "$subdirectories/temp_output";
 
 # For every library selected:
 foreach($fqarray as $fqoriginal) {
+
+
+	# Initialize moveandgunzip command
+	$movecommand = "";
 
 	# Split for double stranded
 	$fqdoublestranded = explode("&", $fqoriginal);
@@ -114,9 +129,9 @@ foreach($fqarray as $fqoriginal) {
 			$fqpath2strand = "$subdirectories/fastq_to_be_crunched/$fqdoublestranded[1]";
 
 			if(preg_match("/\.gz/", $fqpath)==1 and preg_match("/\.gz/", $fqpath2strand)==1){
-				system("mv $fqpath $temppath/$fqdoublestranded[0]");
-				system("mv $fqpath2strand $temppath/$fqdoublestranded[1]");
-				system("gunzip $temppath/*.gz");
+				$movecommand .= "mv $fqpath $temppath/$fqdoublestranded[0]\n";
+				$movecommand .= "mv $fqpath2strand $temppath/$fqdoublestranded[1]\n";
+				$movecommand .= "gunzip $temppath/*.gz\n";;
 				$fq = preg_replace("/.gz/","",$fq);
 				$fq2 = preg_replace("/.gz/","",$fqdoublestranded[1]);	
 				$fqpath = "$temppath/$fq";
@@ -130,8 +145,8 @@ foreach($fqarray as $fqoriginal) {
 
 			if(preg_match("/\.gz/", $fqpath)==1)
 			{
-				system("mv $fqpath $temppath/");
-				system("gunzip $temppath/$fq");
+				$movecommand .= "mv $fqpath $temppath/\n";
+				$movecommand .= "gunzip $temppath/$fq\n";
 				$fq = preg_replace("/.gz/","",$fq);
 				$fqpath = "$temppath/$fq";
 
@@ -147,7 +162,7 @@ foreach($fqarray as $fqoriginal) {
 
 		# Generate location for output files
 		$thoutputfile = "$temppath/library_$library/tophat_out";
-		$cloutputfile = "$temppath/library_$library";
+		$cloutputfile = "$temppath/library_$library/cufflinks_out";
 
 		# Generate commands for TH and CL
 		$thcommand = "tophat -p $procs -o $thoutputfile $fapath $fqpath";
@@ -155,11 +170,11 @@ foreach($fqarray as $fqoriginal) {
 	
 		# Generate mkdir commands for new directories
 		# -p option prevents errors with pre-existing folders
-		$makedirs = "mkdir -p $cloutputfile && mkdir -p $thoutputfile";
+		$makedirs = "mkdir -p $temppath/library_$library && mkdir -p $cloutputfile && mkdir -p $thoutputfile";
 
 		# Append library commands to the output command string
 		$singleoutputcommand = "$makedirs\n$thcommand >> $logfile 2>&1 && $clcommand >> $logfile 2>&1\n";
-		$outputcommands = $outputcommands.$singleoutputcommand;
+		$outputcommands = $outputcommands.$movecommand.$singleoutputcommand;
 	
 		# Build log output
 		$logoutput = $logoutput."Fastq file: $fqoriginal\n"."Command generated: ".$singleoutputcommand;
@@ -186,7 +201,7 @@ file_put_contents($bashfile, $outputcommands, LOCK_EX);
 # echo $outputcommands;
 
 # Execute bash file 
-#system("bash $bashfile");
+system("bash $bashfile");
 
 
 ?>

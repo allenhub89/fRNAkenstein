@@ -18,6 +18,12 @@
 
 $subdirectories = "/var/www/subdirectories_for_interface";
 
+session_start();
+
+if(empty($_SESSION['user_name']))
+{
+  header('Location: notloggedin.html');
+}
 ########################
 # Captcha Verification #
 ########################
@@ -29,46 +35,45 @@ $resp = recaptcha_check_answer ($privatekey,
                         $_POST["recaptcha_challenge_field"],
                         $_POST["recaptcha_response_field"]);
 
-if (!$resp->is_valid) {
-echo "<script language=\"javascript\">";
-echo "parent.location.reload();";
-echo "</script>";
-
-  die ("<h4> Error 15: reCaptcha not entered correctly</h4>");
-} else {
+/*if (!$resp->is_valid) {
+	#echo "<script language=\"javascript\">";
+	#echo "parent.location.reload();";
+	#echo "</script>";
+  	die ("<h4> Error 15: reCaptcha not entered correctly</h4>");
+} else {*/
 
 
 ############################################
 # Some error checking redundancy on inputs #
 ############################################
 
-if(empty($_POST['controlcondition'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['controlcondition']))))){
 	exit("<h4>Error 6: No control condition entered</h4>");
 }
 if(empty($_POST['controlfilename'])){
 	exit("<h4>Error 7: No control libraries selected</h4>");
 }
-if(empty($_POST['expcondition'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['expcondition']))))){
 	exit("<h4>Error 8: No experimental condition entered</h4>");
 }
 if(empty($_POST['expfilename'])){
 	exit("<h4>Error 9: No experimental libraries selected</h4>");
 }
 
-if(empty($_POST['procs'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['procs']))))){
 	exit("<h4>Error 10: Number of proccessors error</h4>");
 }
-if(empty($_POST['afilename'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['afilename']))))){
 	exit("<h4>Error 11: No annotation file selected</h4>");
 }
-if(empty($_POST['fafilename'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['fafilename']))))){
 	exit("<h4>Error 12: No Fasta file selected</h4>");
 }
 
-if(empty($_POST['analysisname'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['analysisname']))))){
 	exit("<h4>Error 13: No analysis name entered</h4>");
 }
-if(empty($_POST['annotationtype'])){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['annotationtype']))))){
 	exit("<h4>Error 14: No annotation type selected</h4>");
 }
 
@@ -76,15 +81,15 @@ if(empty($_POST['annotationtype'])){
 # Grab values from HTML elements #
 ##################################
 
-$controlcondition = $_POST['controlcondition'];
+$controlcondition = strip_tags (htmlspecialchars( escapeshellcmd($_POST['controlcondition'])));
 $controllibs = $_POST['controlfilename'];
-$expcondition = $_POST['expcondition'];
+$expcondition = strip_tags (htmlspecialchars( escapeshellcmd($_POST['expcondition'])));
 $explibs = $_POST['expfilename'];
-$procs = htmlentities($_POST['procs']);
-$anno = htmlentities($_POST['afilename']);
-$fa = htmlentities($_POST['fafilename']);
-$analysisname = $_POST['analysisname'];
-$annotype = $_POST['annotationtype'];
+$procs = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['procs']))));
+$anno = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['afilename']))));
+$fa = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['fafilename']))));
+$analysisname = strip_tags (htmlspecialchars( escapeshellcmd($_POST['analysisname'])));
+$annotype = strip_tags (htmlspecialchars( escapeshellcmd($_POST['annotationtype'])));
 
 ########################
 # Printing information #
@@ -106,7 +111,7 @@ foreach ($controllibs as $controllib){
 echo "</p>";
 
 echo "<p >";
-echo "Experimental condition: $controlcondition";
+echo "Experimental condition: $expcondition";
 echo "</p>";
 
 echo "<p>";
@@ -165,7 +170,6 @@ $logfile = "$subdirectories/logs/$mytimeid.diffexp.log";
 #######################
 
 $commands = "";
-$commands = "mkdir -p $analysispath\n";
 
 #############################
 # Merge ctrl and exp arrays #
@@ -182,17 +186,19 @@ $manifestpath = "$analysispath/manifest.txt";
 
 foreach($libs as $lib)
 {
-  $manifest = $manifest."$thclpath/$lib/cufflinks_out/transcripts.gtf\n";
+  $manifest .= "$thclpath/$lib/cufflinks_out/transcripts.gtf\n";
 }
 
-#file_put_contents($manifestpath, $manifest, LOCK_EX);
+
+system("mkdir -p $analysispath");
+file_put_contents($manifestpath, $manifest, LOCK_EX);
 
 ##############################
 # Annotation and fasta paths #
 ##############################
 
 $annopath = "$subdirectories/annotation_directory/$anno";
-$fapath = "$subdirectories/fasta_directory/$fa";
+$fapath = "$subdirectories/fasta_directory/$fa/$fa.fa";
 
 ###########################
 # Build CuffMerge Command #
@@ -232,7 +238,7 @@ foreach($explibs as $explib)
   }
 }
 
-$cdcommand = "mkdir -p $cdoutputpath\ncuffdiff -p $procs -o $cdoutputpath -l $controlcondition,$expcondition $cmoutputpath $bampaths\n";
+$cdcommand = "mkdir -p $cdoutputpath\ncuffdiff -p $procs -o $cdoutputpath -L $controlcondition,$expcondition $cmoutputpath/merged.gtf $bampaths\n";
 
 ######################
 # HTSeqCount Command #
@@ -252,12 +258,12 @@ foreach($libs as $lib)
 
 	if ($annotype == "ncbi") 
 	{ 
-		$htseqcommand = $htseqcommand."htseq-count -t gene -i gene $analysispath/$library.sam $annopath > $htseqpath/$library.counts\n";
+		$htseqcommand = $htseqcommand."htseq-count -t gene -i gene $sampath/$library.sam $annopath > $htseqpath/$library.counts\n";
 
 	} 
 	else if ($annotype == "ensembl") 
 	{ 
-		$htseqcommand = $htseqcommand."htseq-count -t gene -i Name $analysispath/$library.sam $annopath > $htseqpath/$library.counts\n"; 
+		$htseqcommand = $htseqcommand."htseq-count -t gene -i Name $sampath/$library.sam $annopath > $htseqpath/$library.counts\n"; 
 	} 
 }
 
@@ -266,7 +272,18 @@ foreach($libs as $lib)
 # Build count matrix #
 ######################
 
-# RUN COLIN SCRIPT #
+$countmatrixcommand = "python $subdirectories/generate_count_matrix.py ";
+
+foreach($libs as $lib)
+{
+	preg_match("/library_(.*)/",$lib,$match);
+	$library = $match[1];
+ 	$countmatrixcommand .= "$htseqpath/$library.counts ";
+}
+
+$countmatrixcommand .= "> $htseqpath/count_matrix.txt\n";
+
+
 
 ######################
 # R Programs Section #
@@ -282,8 +299,8 @@ $notNullModel1 = "";
 $notNullModel2 = ""; 
 $nullModel = "";
 
-$controllist = rtrim(implode(',', $controllibs), ',');
-$explist = rtrim(implode(',', $explibs), ',');
+$controllist = "\"".rtrim(implode("\",\"", $controllibs), ",\"")."\"";
+$explist = "\"".rtrim(implode("\",\"", $explibs), ",\"")."\"";
 
 $controlcount = 0; 
 $expcount = 0; 
@@ -344,16 +361,18 @@ foreach ($libs as $library)
 $greparray = ""; 
 $count = 0; 
 
-foreach ($libs as $library) 
+foreach ($libs as $libraryname) 
 { 
-   
+  	preg_match("/library_(.*)/",$libraryname,$match);
+	$librarynum = $match[1];
+ 
 	if ($count == 0) 
 	{ 
-		$greparray = "(grep(\"$library\",list.files(\"$htseqpath\"),value=TRUE))"; 
+		$greparray = "(grep(\"$librarynum\",list.files(\"$htseqpath\"),value=TRUE))"; 
 	} 
 	else
 	{ 
-		$greparray .= ",(grep(\"$library\",list.files(\"$htseqpath\"),value=TRUE))"; 
+		$greparray .= ",(grep(\"$librarynum\",list.files(\"$htseqpath\"),value=TRUE))"; 
 	} 
 
 	$count += 1; 
@@ -364,7 +383,7 @@ foreach ($libs as $library)
 # Generate R Command #
 ######################
 
-$rcommand = "printf \"";
+$rcommand = "";
 $rfilename = "command_$mytimeid.r";
 $rcommandpath = "$analysispath/$rfilename";
 
@@ -399,7 +418,10 @@ $rcommand .= "topCounts(CDPost.NBML, group=2) \n";
 $rcommand .= "NBML.TPs <- getTPs(CDPost.NBML, group=2, TPs = 1:100) \n"; 
 $rcommand .= "topCounts(CDPost.NBML, group=2)\n"; 
 $rcommand .= "blah <- topCounts(CDPost.NBML,group=\"DE\",FDR=1) \n"; 
+$rcommand .= "as.matrix(blah) \n";
+$rcommand .= "colnames(blah) <-c(\"geneName\",$controllist,$explist,\"likelihood\",\"FDR\") \n";
 $rcommand .= "write.csv(blah, file=\"$rpath/bayseq_de_analyzed_dataset_$analysisname.csv\") \n"; 
+
 
 ###################
 # DESEQ2 Commands #
@@ -434,19 +456,23 @@ $rcommand .= "goodList = topTags(de.com, n=\"good\") \n";
 $rcommand .= "write.table (as.data.frame(goodList), file=\"$rpath/edgeR.txt\") \n"; 
 
 
-# FIX THIS LATER DAWG #
-# $rcommand .= "\" > /rtestfile.txt";
-# file_put_contents("/var/www/rtest1.sh", $rcommand);
+# Compile all commands together
+$commands .= $cmcommand.$cdcommand;
+$commands .= $htseqcommand.$countmatrixcommand;
 
-$commands .= $cmcommand.$cdcommand.$htseqcommand;
+$commands .= "R --vanilla < $subdirectories/bash_scripts/r_$mytimeid.R";
 
-#echo nl2br($rcommand);
-echo $commands;# for testing
-#echo "$cmcommand<br>";
-#echo "$cdcommand"; 
+# Create bash file output directory
+$bashfile = "$subdirectories/bash_scripts/run_$mytimeid.diffexp.sh";
 
 
-}
+# Move folder from temp
+$commands .= "\nmv -f $analysispath $subdirectories/diffexpress_output/";
+
+file_put_contents($bashfile, $commands, LOCK_EX);
+file_put_contents("$subdirectories/bash_scripts/r_$mytimeid.R", $rcommand, LOCK_EX);
+
+#}
 ?>
 
 

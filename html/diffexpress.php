@@ -3,15 +3,14 @@
 # fRNAkenstein                       #
 #   by Allen Hubbard & Wayne Treible #
 #                                    #
-# A front-end interface for the      #
-# tuxedo pipeline including Tophat,  #
-# Cufflinks, and Cuffdiff.           #
-#                                    #
 # Version 0.10 Updated 6/17/2014     #
 ######################################
 -->
 
 <?php 
+
+session_start();
+
 ####################################
 # Required File Structure:         #
 #                                  #
@@ -31,7 +30,13 @@
 $subdirectories = "/var/www/subdirectories_for_interface";
 
 
+if(empty($_SESSION['user_name']))
+{
+  header('Location: notloggedin.html');
+}
+
 ?>
+
 
 <head>
 <title>
@@ -113,6 +118,18 @@ $(document).ready(function(){
 		}
 		
 	});
+
+
+	$('.Blocked').change( function() {
+    		var isChecked = this.checked;
+    
+    		if(isChecked) {
+        		$(this).parents("tr:eq(0)").find(".textbox").prop("disabled",true); 
+    		} else {
+        		$(this).parents("tr:eq(0)").find(".textbox").prop("disabled",false);
+    		}
+    
+	});
 });
 </script>
 
@@ -183,7 +200,7 @@ fRNAkenstein - DiffExpress
 ################################
 -->
 
-<table height="90%" style="margin: 0px;">
+<table style="margin: 0px;">
 
 <!--
 ##########################################################
@@ -218,7 +235,7 @@ foreach($controllibs as $library)
     $libpattern = "/\D*(.*)/";
     preg_match($libpattern, $library, $matches);
     $librarynum = $matches[1];
-    echo "<input type=\"checkbox\" name=\"controlfilename[]\" value=\"$library\">$librarynum<br>";
+    echo "<input type=\"checkbox\" name=\"controlfilename[]\" class=\"blocked\" value=\"$library\">$librarynum<br>";
   }
 } 
 
@@ -281,7 +298,7 @@ foreach($explibs as $explibrary)
     $libpattern = "/\D*(.*)/";
     preg_match($libpattern, $explibrary, $matches);
     $librarynum = $matches[1];
-    echo "<input type=\"checkbox\" name=\"expfilename[]\" value=\"$explibrary\">$librarynum<br>";
+    echo "<input type=\"checkbox\" name=\"expfilename[]\" class=\"blocked\" value=\"$explibrary\">$librarynum<br>";
   }
 } 
 
@@ -321,7 +338,7 @@ echo "</select>";
 
 <th rowspan="2" valign="top" style="padding-left:0px;align:left">
 <br>
-<iframe id='frame' name='formresponse' style="border: outset;height: 95% ; background-color:#d0eace" width='500px' frameborder='0'>
+<iframe id='frame' name='formresponse' src='placeholder_response.html' style="border: outset; background-color:#d0eace" width='500px' height='800px' frameborder='0'>
 
 
 </iframe>
@@ -429,11 +446,9 @@ foreach ($fafiles as $fafile)
 -->
 
 <h4> Annotation Type: </h4>
-<input type="radio" name="annotationtype" value="ensembl" checked>Ensembl 
-<input type="radio" name="annotationtype" value="ncbi">NCBI <br>
+<input type="radio" name="annotationtype" value="ncbi" checked>NCBI <br>
+<input type="radio" name="annotationtype" value="ensembl" >Ensembl <br>
 
-<br>
-<br>
 <!--
 #################
 # Captcha Stuff #
@@ -443,8 +458,8 @@ foreach ($fafiles as $fafile)
 <?php
 require_once('recaptchalib.php');
 $publickey = "6LfK0PUSAAAAANftfso7uj8OdyarzxH0zvst0Tmf"; 
-echo "Finally... Prove you're not a robot!";
-echo recaptcha_get_html($publickey);
+#echo "Finally... Prove you're not a robot!";
+#secho recaptcha_get_html($publickey);
 ?>
 
 <br>
@@ -462,7 +477,7 @@ echo recaptcha_get_html($publickey);
 </div>
 <br> <br> <br>
 </form>
-<form action="index.html">
+<form action="menu.php">
     <input align="bottom" type="submit" value="Return to Menu">
 </form>
 </td>

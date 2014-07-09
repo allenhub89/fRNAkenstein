@@ -1,0 +1,142 @@
+<!--
+######################################
+# fRNAkenstein                       #
+#   by Allen Hubbard & Wayne Treible #
+#                                    #
+# A front-end interface for the      #
+# tuxedo pipeline including Tophat,  #
+# Cufflinks, and Cuffdiff.           #
+#                                    #
+# Version 0.10 Updated 6/18/2014     #
+######################################
+-->
+
+<?php 
+session_start();
+if(empty($_SESSION['user_name']))
+{
+  header('Location: notloggedin.html');
+}
+?>
+<!--
+##########
+# Header #
+##########
+-->
+
+<head>
+<title>
+fRNAkenstein:"Beware; for I am fearless, and therefore powerful."
+</title>
+<!link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
+<link rel="STYLESHEET" type="text/css" href="css_dir/buttonStyle.css">
+<!link rel="STYLESHEET" type="text/css" href="css_dir/background.css">
+<link rel="icon" type="image/ico" href="images/favicon.ico"/>
+</head>
+<body >
+<center>
+<!--
+###########################
+# Formatting Box & Legend #
+###########################
+-->
+<style type="text/css">
+    .fieldset-auto-width {
+         display: inline-block;
+    }
+</style>
+<div>
+<fieldset class="fieldset-auto-width">
+<legend>
+<h3 style="background-color:white;">
+<!img src="/favicon.png" alt="fRNAk" width="24" height="24"> 
+Welcome to fRNAkenstein!
+<!img src="/favicon.png" alt="fRNAk" width="24" height="24">
+</h3>
+</legend>
+
+<table style="margin: 0px;">
+<tr>
+<td colspan="3" valign="middle" bgcolor="#d0eace" style="border:outset;padding-top:24px;padding-bottom:24px;padding-left:24px;padding-right:12px;width:500px;height=160px;">
+
+A leightweight, clean, easy-to-use interface for RNA sequencing and <br>
+differential expression. To begin, just follow the 3 simple steps below <br>
+to change your data into visible results. <br>
+<div align="right">-The fRNAkenstein Team </div>
+
+</td>
+</tr>
+
+<tr>
+<td valign="middle"  style="padding-top:24px;padding-left:8px;width:50px;">
+<a href="thcl.php" class="fRNAkbutton">Tophat & Cufflinks</a>
+
+</td>
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+<b>Step 1:</b> Align RNA sequencing reads to the <br>
+reference file using Tophat and Cufflinks.
+</td>
+</tr>
+
+<tr>
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
+<a href="diffexpress.php" class="fRNAkbutton">DiffExpress</a>
+</td>
+
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+<b>Step 2:</b> Calculate differential expression <br>
+levels using an array of tools including <br>
+Cuffdiff, EdgeR, DESeq2, and Bayseq.
+</td>
+</tr>
+
+<tr>
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
+<a href="http://bigbird.anr.udel.edu/~sunliang/pathway/cyto.php" class="fRNAkbutton">Visualize Data</a>
+
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+<b>Step 3:</b> Visualize differential expression <br>
+data using a variety of visualizers. 
+</td>
+
+<tr>
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
+<a href="log_view.php" class="fRNAkbutton">Status</a>
+
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+View the various output and error logs <br>
+of your data runs in real-time using <br>
+the run ID provided in each tool.
+</td>
+</tr>
+
+<tr>
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
+<a href="contact.html" class="fRNAkbutton">About & Contact</a>
+
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+Contact information for the fRNAkenstein <br>
+team and references to the tools used.
+</td>
+</tr>
+
+</table>
+
+<!--
+##########
+# Footer #
+##########
+-->
+
+</link>
+<br>
+
+<p align="right" ><font size="1">- Created by Allen Hubbard and Wayne Treible at the University of Delaware - </font></p>
+</fieldset>
+</div>
+<form method="get" action="/index_easteregg.html">
+    <button type="submit" style="position:absolute;right:0px;bottom:0px;background: transparent;border: none !important;width:170px;height:170px;font-size:0;"></button>
+</form>
+</body>
+
+

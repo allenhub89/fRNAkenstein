@@ -1,17 +1,14 @@
-<!--
+
+<?php 
 ######################################
 # fRNAkenstein                       #
 #   by Allen Hubbard & Wayne Treible #
 #                                    #
-# A front-end interface for the      #
-# tuxedo pipeline including Tophat,  #
-# Cufflinks, and Cuffdiff.           #
-#                                    #
 # Version 0.10 Updated 6/17/2014     #
 ######################################
--->
 
-<?php 
+
+
 ####################################
 # Required File Structure:         #
 #                                  #
@@ -30,6 +27,12 @@
 
 $subdirectories = "/var/www/subdirectories_for_interface";
 
+session_start();
+
+if(empty($_SESSION['user_name']))
+{
+  header('Location: notloggedin.html');
+}
 
 ?>
 
@@ -72,7 +75,7 @@ fRNAkenstein - THCL Cruncher
 ################################
 -->
 
-<table height="90%" style="margin: 0px;">
+<table style="margin: 0px;">
 
 <!--
 ######################
@@ -132,55 +135,60 @@ if(!empty($fqfiles))
 }
 
 echo "<h4>Choose library number(s):</h4>";
-foreach($fqfiles as $fqfile)
-{
-  # Modifying arrays while 'foreach' iterating is broken in php
-  # -> It buffers the array at the foreach call and iterates over 
-	# -> potentially old or modified data (bad, php!)
-  # This double checks that the element is in the new fqfiles array 
-	# to fix this minor annoying problem...
-  if (($key = array_search($fqfile, $fqfiles)) !== false) 
+if(count($fqfiles)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No libraries ready to crunch!<br>";
+} else {
+	# else, list the files
+	foreach($fqfiles as $fqfile)
 	{
-	  $doublestranded = 0;
-	  if ($fqfile !== "." and $fqfile !== "..")
-	  { 
-	    $librarynum = "";
-	    $libpattern = "/^s*(\d*).*/";
-	    preg_match($libpattern, $fqfile, $matches);
-	    $librarynum = $matches[1];
-	  
-	    foreach ($fqfiles as $fqfile2)
-	    {
-				if ($fqfile != "." and $fqfile != ".." and $fqfile2 != "." and $fqfile2 != "..")
-	  	  { 
-		    	$librarynum2 = "";
-		    	$libpattern = "/^s*(\d*).*/";
-					preg_match($libpattern, $fqfile2, $matches2);
-		    	$librarynum2 = $matches2[1];
-	
-				  if(($librarynum2 == $librarynum) and ($fqfile !== $fqfile2))
-				  {
-						# Remove double stranded results from list
-						if (($key = array_search($fqfile, $fqfiles)) !== false) 
+		# Modifying arrays while 'foreach' iterating is broken in php
+		# -> It buffers the array at the foreach call and iterates over 
+		# -> potentially old or modified data (bad, php!)
+		# This double checks that the element is in the new fqfiles array 
+		# to fix this minor annoying problem...
+		if (($key = array_search($fqfile, $fqfiles)) !== false) 
+		{
+			$doublestranded = 0;
+			if ($fqfile !== "." and $fqfile !== "..")
+			{ 
+				$librarynum = "";
+				$libpattern = "/^s*(\d*).*/";
+				preg_match($libpattern, $fqfile, $matches);
+				$librarynum = $matches[1];
+
+				foreach ($fqfiles as $fqfile2)
+				{
+					if ($fqfile != "." and $fqfile != ".." and $fqfile2 != "." and $fqfile2 != "..")
+					{ 
+						$librarynum2 = "";
+						$libpattern = "/^s*(\d*).*/";
+						preg_match($libpattern, $fqfile2, $matches2);
+						$librarynum2 = $matches2[1];
+
+						if(($librarynum2 == $librarynum) and ($fqfile !== $fqfile2))
 						{
-							$key2 = array_search($fqfile2, $fqfiles);
-				 		  	unset($fqfiles[$key]);
-							unset($fqfiles[$key2]);
-						}	      	
-					  $doublestranded = 1;
+							# Remove double stranded results from list
+							if (($key = array_search($fqfile, $fqfiles)) !== false) 
+							{
+								$key2 = array_search($fqfile2, $fqfiles);
+								unset($fqfiles[$key]);
+								unset($fqfiles[$key2]);
+							}	      	
+							$doublestranded = 1;
 
-				    echo "<input type=\"checkbox\" name=\"fqfilename[]\" value=\"$fqfile&$fqfile2\">$librarynum (double stranded)<br>";
+							echo "<input type=\"checkbox\" name=\"fqfilename[]\" value=\"$fqfile&$fqfile2\">$librarynum (double stranded)<br>";
 
-				  } 
-		  	}
+						} 
+					}
+				}
+
+				if ($doublestranded == 0)
+				{
+					echo "<input type=\"checkbox\" name=\"fqfilename[]\" value=\"$fqfile\">$librarynum<br>";
+				}
 			}
-
-	    if ($doublestranded == 0)
-	    {
-				echo "<input type=\"checkbox\" name=\"fqfilename[]\" value=\"$fqfile\">$librarynum<br>";
-	    }
-	  }
-  }
+		}
+	}
 } 
 
 echo "</select>";
@@ -279,7 +287,7 @@ foreach ($fafiles as $fafile)
 </div>
 <br> <br> <br>
 </form>
-<form action="index.html">
+<form action="menu.php">
     <input align="bottom" type="submit" value="Return to Menu">
 </form>
 </td>
@@ -292,7 +300,7 @@ foreach ($fafiles as $fafile)
 
 <td valign="top" style="padding-left:0px;align:left">
 <br>
-<iframe name='formresponse' style="border: outset;height: 95% ; background-color:#d0eace" width='500px' frameborder='0'>
+<iframe name='formresponse' src='placeholder_response.html' style="border: outset; background-color:#d0eace" width='500px' height='500px' frameborder='0'>
 </iframe>
 
 <!--
@@ -308,3 +316,4 @@ foreach ($fafiles as $fafile)
 <p align="right"><font size="1">- Created by Allen Hubbard and Wayne Treible at the University of Delaware - </font></p>
 </fieldset>
 </body>
+

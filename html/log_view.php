@@ -12,6 +12,9 @@
 -->
 
 <?php 
+
+session_start();
+
 ####################################
 # Required File Structure:         #
 #                                  #
@@ -29,6 +32,11 @@
 ####################################
 
 $subdirectories = "/var/www/subdirectories_for_interface";
+
+if(empty($_SESSION['user_name']))
+{
+  header('Location: notloggedin.html');
+}
 
 ?>
 
@@ -69,7 +77,7 @@ fRNAkenstein - Log Viewer
 ################################
 -->
 
-<table height="90%" style="margin: 0px;">
+<table style="margin: 0px;">
 <tr>
 <td valign="top" >
 
@@ -122,7 +130,7 @@ foreach ($logfiles as $logfile)
 -->
 
 <br> <br> <br> <br> <br> <br>
-<form action="index.html">
+<form action="menu.php">
     <input align = "bottom" type="submit" value="Return to Menu">
 </form>
 </td>
@@ -135,7 +143,7 @@ foreach ($logfiles as $logfile)
 
 <td valign="top" style="padding-left:20px;align:left">
 <br>
-<iframe name='formresponse' style="border: outset; background-color:#d0eace" width='500px' height='500px' frameborder='0'>
+<iframe name='formresponse' src='placeholder_response.html' style="border: outset; background-color:#d0eace" width='500px' height='500px' frameborder='0'>
 </iframe>
 
 <!--
