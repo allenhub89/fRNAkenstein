@@ -14,7 +14,7 @@
 session_start();
 if(empty($_SESSION['user_name']))
 {
-  header('Location: notloggedin.html');
+  header('Location: index.php');
 }
 ?>
 <!--

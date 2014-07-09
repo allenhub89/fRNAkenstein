@@ -174,7 +174,7 @@ The fRNAkenstein Pipeline
 <!img src="/favicon.png" alt="fRNAk" width="24" height="24">
 </h3>
 </legend>
-<h4>Click on an element for more information.</h4><br>
+<h4>Click on an element for more information.</h4>
 <div id="pointer_div" onclick="point_it(event)" style = "background-image:url('images/flowchart.png');height:528;width:861">
 </div>
 <br>

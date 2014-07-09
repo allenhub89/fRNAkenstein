@@ -411,12 +411,12 @@ class OneFileLoginApplication
         echo '<input type="submit"  name="login" value="Log in" />';
         echo '</form>';
 	echo '<br> <br>To obtain a fRNAkenstein account, email wtreible@udel.edu<br><br>';
-	echo '
+	echo '</fieldset>
 	<br><br>
 	<img src="images/chicken.jpg" alt="SchmidtLab" width="160" height="125" > </td>
 	<img src="images/USDA.jpg" alt="USDA" width="266" height="125"> 
 	<img src="images/NSF.jpg" alt="NSF" width="125" height="125"> <br>
-	<p align="center" ><font size="1">- NSF award: 1147029 :: NIFA award: 2010-04233 - </font></p></fieldset>';
+	<p align="center" ><font size="1">- NSF award: 1147029 :: NIFA award: 2010-04233 - </font></p>';
 	
 	#echo '<form action="contact.html">';
 	#echo '<input type="submit" name ="about" value="About fRNAkenstein"></form>';
