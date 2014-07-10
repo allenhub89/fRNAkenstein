@@ -133,7 +133,7 @@ function point_it(event){
 			{
 				//THCL
 				$( "#dialog" ).dialog( "open" );
-				$("#dialog p").text("The first stage of the fRNAkenstein pipeline. Performs gene mapping and transcript assembly for input libraries.");
+				$("#dialog p").text("The first stage of the fRNAkenstein pipeline. Performs gene mapping and transcript assembly for input libraries. First, select the libraries you want to generate transcripts for. Then, select the number of processors (recommended 24), the annotation file, and the fasta file for this stage. A confirmation of your scheduled task will be displayed in the window to the right, along with the unique run ID. Save this for your records.");
 				$('#dialog').dialog('option', 'title', 'THCL');
 				return;
 			}
@@ -141,7 +141,7 @@ function point_it(event){
 			{
 				//DiffExpress
 				$( "#dialog" ).dialog( "open" );
-				$("#dialog p").text("The second stage of the fRNAkenstein pipeline. Assembles consensus annotation and generates differential expression results.");
+				$("#dialog p").text("The second stage of the fRNAkenstein pipeline. Assembles consensus annotation and generates differential expression results. First, name the control and experimental conditions, and select the control and experimental libraries. If you know the library numbers of an any old library you want to add, you can use the \"add archived library\" feature to add them. Then, select the number of processors (recommended 24), the annotation file, and the fasta file for this stage. Finally, name the analysis, choose the annotation format (NCBI or Ensembl), and begin the analysis. A confirmation of your scheduled task will be displayed in the window to the right, along with the unique run ID. Save this for your records.");
 				$('#dialog').dialog('option', 'title', 'DiffExpress');
 				return;
 			}
@@ -178,7 +178,7 @@ The fRNAkenstein Pipeline
 <div id="pointer_div" onclick="point_it(event)" style = "background-image:url('images/flowchart.png');height:528;width:861">
 </div>
 <br>
-<font size="2">Click inside "Tophat and Cufflinks" or "DiffExpress" for instructions.</font>
+<font size="2">Click inside "Tophat and Cufflinks" or "DiffExpress" for stage instructions.</font>
 <br> <br> <br> <br>
 <form action="menu.php">
     <input align = "bottom" type="submit" value="Return to Menu">

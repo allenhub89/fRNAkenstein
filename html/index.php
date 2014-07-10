@@ -410,7 +410,7 @@ class OneFileLoginApplication
         }
         echo '<input type="submit"  name="login" value="Log in" />';
         echo '</form>';
-	echo '<br> <br>To obtain a fRNAkenstein account, email wtreible@udel.edu<br><br>';
+	echo '<br> <br>To obtain a fRNAkenstein account, <br>email wtreible@udel.edu with subject line "fRNAk acct"<br><br>';
 	echo '
 	<br><br>
 	<img src="images/chicken.jpg" alt="SchmidtLab" width="160" height="125" > </td>

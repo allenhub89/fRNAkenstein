@@ -22,7 +22,7 @@ session_start();
 
 if(empty($_SESSION['user_name']))
 {
-  header('Location: notloggedin.html');
+  header('Location: index.php');
 }
 ########################
 # Captcha Verification #
@@ -205,7 +205,7 @@ $fapath = "$subdirectories/fasta_directory/$fa/$fa.fa";
 ###########################
 
 $cmoutputpath = "$analysispath/cuffmerge_output";
-$cmcommand = "mkdir -p $cmoutputpath\ncuffmerge -p $procs -g $annopath -o $cmoutputpath -s $fapath $manifestpath\n";
+$cmcommand = "mkdir -p $cmoutputpath &&\ncuffmerge -p $procs -g $annopath -o $cmoutputpath -s $fapath $manifestpath &&\n";
 
 ##########################
 # Build CuffDiff Command #
@@ -460,14 +460,15 @@ $rcommand .= "write.table (as.data.frame(goodList), file=\"$rpath/edgeR.txt\") \
 $commands .= $cmcommand.$cdcommand;
 $commands .= $htseqcommand.$countmatrixcommand;
 
-$commands .= "R --vanilla < $subdirectories/bash_scripts/r_$mytimeid.R";
+$commands .= "R --vanilla < $subdirectories/bash_scripts/r_$mytimeid.R\n";
+$commands .= "rm -f $subdirectories/bash_scripts/r_$mytimeid.R\n";
 
 # Create bash file output directory
 $bashfile = "$subdirectories/bash_scripts/run_$mytimeid.diffexp.sh";
 
 
 # Move folder from temp
-$commands .= "\nmv -f $analysispath $subdirectories/diffexpress_output/";
+$commands .= "mv -f $analysispath $subdirectories/diffexpress_output/";
 
 file_put_contents($bashfile, $commands, LOCK_EX);
 file_put_contents("$subdirectories/bash_scripts/r_$mytimeid.R", $rcommand, LOCK_EX);

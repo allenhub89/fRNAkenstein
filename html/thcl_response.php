@@ -31,7 +31,7 @@ if(empty($_SESSION['user_name']))
 # Some error checking redundancy on inputs #
 ############################################
 
-if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['fqfilename']))))){
+if(empty($_GET['fqfilename'])){
 	exit("<h4>Error 1: No Fastq file selected</h4>");
 }
 if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['procs']))))){
@@ -48,7 +48,7 @@ if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['fafilename']))))){
 # Grab values from HTML elements #
 ##################################
 
-$fqarray = strip_tags (htmlspecialchars( escapeshellcmd($_GET['fqfilename'])));
+$fqarray = $_GET['fqfilename'];
 $procs = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['procs']))));
 $anno = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['afilename']))));
 $fa = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['fafilename']))));
@@ -64,7 +64,7 @@ echo "<h4>Crunching library with data:</h4>";
 echo "<p>";
 echo "Library file(s) selected: <br>";
 foreach ($fqarray as $fqfile){
-	echo $fqfile."<br>";
+	echo strip_tags (htmlspecialchars( escapeshellcmd($fqfile)))."<br>";
 }
 echo "</p>";
 
@@ -129,9 +129,10 @@ foreach($fqarray as $fqoriginal) {
 			$fqpath2strand = "$subdirectories/fastq_to_be_crunched/$fqdoublestranded[1]";
 
 			if(preg_match("/\.gz/", $fqpath)==1 and preg_match("/\.gz/", $fqpath2strand)==1){
-				$movecommand .= "mv $fqpath $temppath/$fqdoublestranded[0]\n";
-				$movecommand .= "mv $fqpath2strand $temppath/$fqdoublestranded[1]\n";
-				$movecommand .= "gunzip $temppath/*.gz\n";;
+				system("mv $fqpath $temppath/$fqdoublestranded[0]");
+				system("mv $fqpath2strand $temppath/$fqdoublestranded[1]");
+				
+				$movecommand .= "gunzip $temppath/*.gz &&\n";;
 				$fq = preg_replace("/.gz/","",$fq);
 				$fq2 = preg_replace("/.gz/","",$fqdoublestranded[1]);	
 				$fqpath = "$temppath/$fq";
@@ -145,8 +146,8 @@ foreach($fqarray as $fqoriginal) {
 
 			if(preg_match("/\.gz/", $fqpath)==1)
 			{
-				$movecommand .= "mv $fqpath $temppath/\n";
-				$movecommand .= "gunzip $temppath/$fq\n";
+				system("mv $fqpath $temppath/");
+				$movecommand .= "gunzip $temppath/$fq &&\n";
 				$fq = preg_replace("/.gz/","",$fq);
 				$fqpath = "$temppath/$fq";
 
@@ -173,7 +174,7 @@ foreach($fqarray as $fqoriginal) {
 		$makedirs = "mkdir -p $temppath/library_$library && mkdir -p $cloutputfile && mkdir -p $thoutputfile";
 
 		# Append library commands to the output command string
-		$singleoutputcommand = "$makedirs\n$thcommand >> $logfile 2>&1 && $clcommand >> $logfile 2>&1\n";
+		$singleoutputcommand = "$makedirs &&\n$thcommand >> $logfile 2>&1 && $clcommand >> $logfile 2>&1 &&\n";
 		$outputcommands = $outputcommands.$movecommand.$singleoutputcommand;
 	
 		# Build log output
@@ -198,11 +199,6 @@ file_put_contents($logfile, $logoutput);
 file_put_contents($bashfile, $outputcommands, LOCK_EX);
 
 # Test output of commands
-# echo $outputcommands;
-
-# Execute bash file 
-system("bash $bashfile");
-
 
 ?>
 

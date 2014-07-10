@@ -120,7 +120,7 @@ $(document).ready(function(){
 	});
 
 
-	$('.Blocked').change( function() {
+	/*$('.Blocked').change( function() {
     		var isChecked = this.checked;
     
     		if(isChecked) {
@@ -129,8 +129,55 @@ $(document).ready(function(){
         		$(this).parents("tr:eq(0)").find(".textbox").prop("disabled",false);
     		}
     
+	});*/
+
+	$(".Blockedctrl").click(function(event) {
+		var val = event.target.value;
+		var myname = "controlfilename[]";
+		var othername = "expfilename[]";
+		if(this.checked){
+			$('input:checkbox[name="' + othername + '"][value="' + val + '"]').attr("disabled", true);
+
+		} else {
+			$('input:checkbox[name="' + othername + '"][value="' + val + '"]').removeAttr("disabled");
+		};
+
 	});
+	$(".Blockedexp").click(function(event) {
+		var val = event.target.value;
+		var myname = "expfilename[]";
+		var othername = "controlfilename[]";
+		if(this.checked){
+			$('input:checkbox[name="' + othername + '"][value="' + val + '"]').attr("disabled", true);
+
+		} else {
+			$('input:checkbox[name="' + othername + '"][value="' + val + '"]').removeAttr("disabled");
+		};
+
+
+	});
+
+	$( "#dialog" ).dialog({
+		autoOpen: false,
+		buttons: [ { text: "Okay", click: function() { $( this ).dialog( "close" ); } } ],
+		show: {
+			effect: "puff",
+			duration: 250
+		},
+		hide: {
+			effect: "puff",
+			duration: 250
+		},
+		width: 450,
+		height: 450,
+	});
+	$("#help").click(function() {
+        	alert("clicked");
+    	});
+
 });
+
+
 </script>
 
 
@@ -227,19 +274,23 @@ if(!empty($controllibs))
 }
 
 echo "<h4>Choose control library number(s):</h4>";
-foreach($controllibs as $library)
-{
-  if ($library !== "." and $library !== "..")
-  { 
-    $librarynum = "";
-    $libpattern = "/\D*(.*)/";
-    preg_match($libpattern, $library, $matches);
-    $librarynum = $matches[1];
-    echo "<input type=\"checkbox\" name=\"controlfilename[]\" class=\"blocked\" value=\"$library\">$librarynum<br>";
-  }
-} 
+if(count($controllibs)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No libraries ready to crunch!<br>";
+} else {
+  foreach($controllibs as $library)
+  {
+    if ($library !== "." and $library !== "..")
+    {  
+      $librarynum = "";
+      $libpattern = "/\D*(.*)/";
+      preg_match($libpattern, $library, $matches);
+      $librarynum = $matches[1];
+      echo "<input type=\"checkbox\" name=\"controlfilename[]\" class=\"blockedctrl\" value=\"$library\">$librarynum<br>";
+    }
+  } 
+  echo "</select>";
+}  
 
-echo "</select>";
 
 ?>
 
@@ -290,20 +341,23 @@ if(!empty($explibs))
 }
 
 echo "<h4>Choose experimental library number(s):</h4>";
-foreach($explibs as $explibrary)
-{
-  if ($explibrary !== "." and $explibrary !== "..")
-  { 
-    $librarynum = "";
-    $libpattern = "/\D*(.*)/";
-    preg_match($libpattern, $explibrary, $matches);
-    $librarynum = $matches[1];
-    echo "<input type=\"checkbox\" name=\"expfilename[]\" class=\"blocked\" value=\"$explibrary\">$librarynum<br>";
-  }
-} 
+if(count($explibs)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No libraries ready to crunch!<br>";
+} else {
+	foreach($explibs as $explibrary)
+	{
+	  if ($explibrary !== "." and $explibrary !== "..")
+	  { 
+	    $librarynum = "";
+	    $libpattern = "/\D*(.*)/";
+	    preg_match($libpattern, $explibrary, $matches);
+	    $librarynum = $matches[1];
+	    echo "<input type=\"checkbox\" name=\"expfilename[]\" class=\"blockedexp\" value=\"$explibrary\">$librarynum<br>";
+	  }
+	} 
 
-echo "</select>";
-
+	echo "</select>";
+}
 ?>
 
 <br>
@@ -392,17 +446,21 @@ function showVal(newVal){
 $afiles = scandir("$subdirectories/annotation_directory");
 
 echo "<h4>Choose an annotation file:</h4>";
-echo "<select name=\"afilename\">";
-foreach ($afiles as $afile) 
-{
-  if(($afile != ".") and ($afile != ".."))
-  { 
-    echo "<option value=\"$afile\">$afile</option>";
-  }
-} 
-
+if(count($afiles)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No annotation files available! (email wtreible@udel.edu)<br>";
+} else {
+	echo "<select name=\"afilename\">";
+	foreach ($afiles as $afile) 
+	{
+	  if(($afile != ".") and ($afile != ".."))
+	  { 
+	    echo "<option value=\"$afile\">$afile</option>";
+	  }
+	} 
+	echo "</select>";
+}
 ?>
-</select>
+
 </div>
 
 <!--
@@ -417,17 +475,21 @@ foreach ($afiles as $afile)
 $fafiles = scandir("$subdirectories/fasta_directory"); 
 
 echo "<h4>Choose a fasta:</h4>";
-echo "<select name=\"fafilename\">";
-foreach ($fafiles as $fafile)
-{
-  if (($fafile != ".") and ($fafile != ".."))
-  { 
-    echo "<option value=\"$fafile\">$fafile</option>";
-  }
-} 
-?>
+if(count($afiles)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No fasta files available! (email wtreible@udel.edu)<br>";
+} else {
+	echo "<select name=\"fafilename\">";
+	foreach ($fafiles as $fafile)
+	{
+	  if (($fafile != ".") and ($fafile != ".."))
+	  { 
+	    echo "<option value=\"$fafile\">$fafile</option>";
+	  }
+	} 
+	echo "</select>";
+}
 
-</select>
+?>
 
 </div>
 
@@ -459,13 +521,31 @@ foreach ($fafiles as $fafile)
 require_once('recaptchalib.php');
 $publickey = "6LfK0PUSAAAAANftfso7uj8OdyarzxH0zvst0Tmf"; 
 #echo "Finally... Prove you're not a robot!";
-#secho recaptcha_get_html($publickey);
+#echo recaptcha_get_html($publickey);
 ?>
 
 <br>
 
 <input type='hidden' name='submitted' id='submitted' value='1'/>
-
+<!--
+##############
+# Dialog Box #
+##############
+-->
+<div id="dialog" style="display:none;" title="">
+  <p></p>
+</div>
+<script>
+function help(event)
+{
+	//DiffExpress
+	alert("Hello");
+	$( "#dialog" ).dialog( "open" );
+	$("#dialog p").text("The second stage of the fRNAkenstein pipeline. Assembles consensus annotation and generates differential expression results. First, name the control and experimental conditions, and select the control and experimental libraries. If you know the library numbers of an any old library you want to add, you can use the \"add archived library\" feature to add them. Then, select the number of processors (recommended 24), the annotation file, and the fasta file for this stage. Finally, name the analysis, choose the annotation format (NCBI or Ensembl), and begin the analysis. A confirmation of your scheduled task will be displayed in the window to the right, along with the unique run ID. Safe this for your records.");
+	$('#dialog').dialog('option', 'title', 'DiffExpress');
+	return;
+}
+</script>
 <!--
 ###########################
 # Submit and Menu Buttons #
@@ -476,6 +556,8 @@ $publickey = "6LfK0PUSAAAAANftfso7uj8OdyarzxH0zvst0Tmf";
 <button id = "crunch" type="submit">fRNAkenstein, Crunch!</button>
 </div>
 <br> <br> <br>
+<button type="button" id="help" onclick="help(event)">Help!</button>
+<br> <br> <br>
 </form>
 <form action="menu.php">
     <input align="bottom" type="submit" value="Return to Menu">
@@ -483,6 +565,7 @@ $publickey = "6LfK0PUSAAAAANftfso7uj8OdyarzxH0zvst0Tmf";
 </td>
 
 </td>
+
 
 <!--
 #######################

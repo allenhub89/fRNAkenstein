@@ -120,7 +120,7 @@ $(document).ready(function(){
 	});
 
 
-	$('.Blocked').change( function() {
+	/*$('.Blocked').change( function() {
     		var isChecked = this.checked;
     
     		if(isChecked) {
@@ -129,8 +129,37 @@ $(document).ready(function(){
         		$(this).parents("tr:eq(0)").find(".textbox").prop("disabled",false);
     		}
     
+	});*/
+
+	$(".Blockedctrl").click(function(event) {
+		var val = event.target.value;
+		var myname = "controlfilename[]";
+		var othername = "expfilename[]";
+		if(this.checked){
+			$('input:checkbox[name="' + othername + '"][value="' + val + '"]').attr("disabled", true);
+
+		} else {
+			$('input:checkbox[name="' + othername + '"][value="' + val + '"]').removeAttr("disabled");
+		};
+
 	});
+	$(".Blockedexp").click(function(event) {
+		var val = event.target.value;
+		var myname = "expfilename[]";
+		var othername = "controlfilename[]";
+		if(this.checked){
+			$('input:checkbox[name="' + othername + '"][value="' + val + '"]').attr("disabled", true);
+
+		} else {
+			$('input:checkbox[name="' + othername + '"][value="' + val + '"]').removeAttr("disabled");
+		};
+
+
+	});
+
 });
+
+
 </script>
 
 
@@ -227,19 +256,23 @@ if(!empty($controllibs))
 }
 
 echo "<h4>Choose control library number(s):</h4>";
-foreach($controllibs as $library)
-{
-  if ($library !== "." and $library !== "..")
-  { 
-    $librarynum = "";
-    $libpattern = "/\D*(.*)/";
-    preg_match($libpattern, $library, $matches);
-    $librarynum = $matches[1];
-    echo "<input type=\"checkbox\" name=\"controlfilename[]\" class=\"blocked\" value=\"$library\">$librarynum<br>";
-  }
-} 
+if(count($controllibs)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No libraries ready to crunch!<br>";
+} else {
+  foreach($controllibs as $library)
+  {
+    if ($library !== "." and $library !== "..")
+    {  
+      $librarynum = "";
+      $libpattern = "/\D*(.*)/";
+      preg_match($libpattern, $library, $matches);
+      $librarynum = $matches[1];
+      echo "<input type=\"checkbox\" name=\"controlfilename[]\" class=\"blockedctrl\" value=\"$library\">$librarynum<br>";
+    }
+  } 
+  echo "</select>";
+}  
 
-echo "</select>";
 
 ?>
 
@@ -290,20 +323,23 @@ if(!empty($explibs))
 }
 
 echo "<h4>Choose experimental library number(s):</h4>";
-foreach($explibs as $explibrary)
-{
-  if ($explibrary !== "." and $explibrary !== "..")
-  { 
-    $librarynum = "";
-    $libpattern = "/\D*(.*)/";
-    preg_match($libpattern, $explibrary, $matches);
-    $librarynum = $matches[1];
-    echo "<input type=\"checkbox\" name=\"expfilename[]\" class=\"blocked\" value=\"$explibrary\">$librarynum<br>";
-  }
-} 
+if(count($explibs)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No libraries ready to crunch!<br>";
+} else {
+	foreach($explibs as $explibrary)
+	{
+	  if ($explibrary !== "." and $explibrary !== "..")
+	  { 
+	    $librarynum = "";
+	    $libpattern = "/\D*(.*)/";
+	    preg_match($libpattern, $explibrary, $matches);
+	    $librarynum = $matches[1];
+	    echo "<input type=\"checkbox\" name=\"expfilename[]\" class=\"blockedexp\" value=\"$explibrary\">$librarynum<br>";
+	  }
+	} 
 
-echo "</select>";
-
+	echo "</select>";
+}
 ?>
 
 <br>
@@ -392,17 +428,21 @@ function showVal(newVal){
 $afiles = scandir("$subdirectories/annotation_directory");
 
 echo "<h4>Choose an annotation file:</h4>";
-echo "<select name=\"afilename\">";
-foreach ($afiles as $afile) 
-{
-  if(($afile != ".") and ($afile != ".."))
-  { 
-    echo "<option value=\"$afile\">$afile</option>";
-  }
-} 
-
+if(count($afiles)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No annotation files available! (email wtreible@udel.edu)<br>";
+} else {
+	echo "<select name=\"afilename\">";
+	foreach ($afiles as $afile) 
+	{
+	  if(($afile != ".") and ($afile != ".."))
+	  { 
+	    echo "<option value=\"$afile\">$afile</option>";
+	  }
+	} 
+	echo "</select>";
+}
 ?>
-</select>
+
 </div>
 
 <!--
@@ -417,17 +457,21 @@ foreach ($afiles as $afile)
 $fafiles = scandir("$subdirectories/fasta_directory"); 
 
 echo "<h4>Choose a fasta:</h4>";
-echo "<select name=\"fafilename\">";
-foreach ($fafiles as $fafile)
-{
-  if (($fafile != ".") and ($fafile != ".."))
-  { 
-    echo "<option value=\"$fafile\">$fafile</option>";
-  }
-} 
-?>
+if(count($afiles)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No fasta files available! (email wtreible@udel.edu)<br>";
+} else {
+	echo "<select name=\"fafilename\">";
+	foreach ($fafiles as $fafile)
+	{
+	  if (($fafile != ".") and ($fafile != ".."))
+	  { 
+	    echo "<option value=\"$fafile\">$fafile</option>";
+	  }
+	} 
+	echo "</select>";
+}
 
-</select>
+?>
 
 </div>
 
@@ -459,12 +503,20 @@ foreach ($fafiles as $fafile)
 require_once('recaptchalib.php');
 $publickey = "6LfK0PUSAAAAANftfso7uj8OdyarzxH0zvst0Tmf"; 
 #echo "Finally... Prove you're not a robot!";
-#secho recaptcha_get_html($publickey);
+#echo recaptcha_get_html($publickey);
 ?>
 
 <br>
 
 <input type='hidden' name='submitted' id='submitted' value='1'/>
+<!--
+##############
+# Dialog Box #
+##############
+-->
+<div id="dialog" style="display:none;" title="">
+  <p></p>
+</div>
 
 <!--
 ###########################
@@ -476,6 +528,7 @@ $publickey = "6LfK0PUSAAAAANftfso7uj8OdyarzxH0zvst0Tmf";
 <button id = "crunch" type="submit">fRNAkenstein, Crunch!</button>
 </div>
 <br> <br> <br>
+
 </form>
 <form action="menu.php">
     <input align="bottom" type="submit" value="Return to Menu">
@@ -483,6 +536,7 @@ $publickey = "6LfK0PUSAAAAANftfso7uj8OdyarzxH0zvst0Tmf";
 </td>
 
 </td>
+
 
 <!--
 #######################

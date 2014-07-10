@@ -205,7 +205,7 @@ $fapath = "$subdirectories/fasta_directory/$fa/$fa.fa";
 ###########################
 
 $cmoutputpath = "$analysispath/cuffmerge_output";
-$cmcommand = "mkdir -p $cmoutputpath\ncuffmerge -p $procs -g $annopath -o $cmoutputpath -s $fapath $manifestpath\n";
+$cmcommand = "mkdir -p $cmoutputpath &&\ncuffmerge -p $procs -g $annopath -o $cmoutputpath -s $fapath $manifestpath &&\n";
 
 ##########################
 # Build CuffDiff Command #
@@ -238,7 +238,7 @@ foreach($explibs as $explib)
   }
 }
 
-$cdcommand = "mkdir -p $cdoutputpath\ncuffdiff -p $procs -o $cdoutputpath -L $controlcondition,$expcondition $cmoutputpath/merged.gtf $bampaths\n";
+$cdcommand = "mkdir -p $cdoutputpath &&\ncuffdiff -p $procs -o $cdoutputpath -L $controlcondition,$expcondition $cmoutputpath/merged.gtf $bampaths &&\n";
 
 ######################
 # HTSeqCount Command #
@@ -247,23 +247,23 @@ $cdcommand = "mkdir -p $cdoutputpath\ncuffdiff -p $procs -o $cdoutputpath -L $co
 $sampath = "$analysispath/sam_output";
 $htseqpath = "$analysispath/htseq_output";
 
-$htseqcommand = "mkdir -p $sampath\nmkdir -p $htseqpath\n";
+$htseqcommand = "mkdir -p $sampath &&\nmkdir -p $htseqpath &&\n";
     
 foreach($libs as $lib)
 {
 	preg_match("/library_(.*)/",$lib,$match);
 	$library = $match[1];
 	
-	$htseqcommand = $htseqcommand."samtools view -h -o $sampath/$library.sam $thclpath/library_$library/tophat_out/accepted_hits.bam\n";
+	$htseqcommand = $htseqcommand."samtools view -h -o $sampath/$library.sam $thclpath/library_$library/tophat_out/accepted_hits.bam &&\n";
 
 	if ($annotype == "ncbi") 
 	{ 
-		$htseqcommand = $htseqcommand."htseq-count -t gene -i gene $sampath/$library.sam $annopath > $htseqpath/$library.counts\n";
+		$htseqcommand = $htseqcommand."htseq-count -t gene -i gene $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n";
 
 	} 
 	else if ($annotype == "ensembl") 
 	{ 
-		$htseqcommand = $htseqcommand."htseq-count -t gene -i Name $sampath/$library.sam $annopath > $htseqpath/$library.counts\n"; 
+		$htseqcommand = $htseqcommand."htseq-count -t gene -i Name $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n"; 
 	} 
 }
 
@@ -281,7 +281,7 @@ foreach($libs as $lib)
  	$countmatrixcommand .= "$htseqpath/$library.counts ";
 }
 
-$countmatrixcommand .= "> $htseqpath/count_matrix.txt\n";
+$countmatrixcommand .= "> $htseqpath/count_matrix.txt &&\n";
 
 
 
@@ -460,14 +460,15 @@ $rcommand .= "write.table (as.data.frame(goodList), file=\"$rpath/edgeR.txt\") \
 $commands .= $cmcommand.$cdcommand;
 $commands .= $htseqcommand.$countmatrixcommand;
 
-$commands .= "R --vanilla < $subdirectories/bash_scripts/r_$mytimeid.R";
+$commands .= "R --vanilla < $subdirectories/bash_scripts/r_$mytimeid.R &&\n";
+$commands .= "rm -f $subdirectories/bash_scripts/r_$mytimeid.R &&\n";
 
 # Create bash file output directory
 $bashfile = "$subdirectories/bash_scripts/run_$mytimeid.diffexp.sh";
 
 
 # Move folder from temp
-$commands .= "\nmv -f $analysispath $subdirectories/diffexpress_output/";
+$commands .= "mv -f $analysispath $subdirectories/diffexpress_output/";
 
 file_put_contents($bashfile, $commands, LOCK_EX);
 file_put_contents("$subdirectories/bash_scripts/r_$mytimeid.R", $rcommand, LOCK_EX);

@@ -31,7 +31,7 @@ session_start();
 
 if(empty($_SESSION['user_name']))
 {
-  header('Location: notloggedin.html');
+  header('Location: index.php');
 }
 
 ?>
@@ -235,18 +235,24 @@ function showVal(newVal){
 $afiles = scandir("$subdirectories/annotation_directory");
 
 echo "<h4>Choose an annotation file:</h4>";
-echo "<select name=\"afilename\">";
-foreach ($afiles as $afile) 
-{
-  if(($afile != ".") and ($afile != ".."))
-  { 
-    echo "<option value=\"$afile\">$afile</option>";
-  }
-} 
 
+if(count($afiles)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No annotation files available! (email wtreible@udel.edu)<br>";
+} else {
+	echo "<select name=\"afilename\">";
+	foreach ($afiles as $afile) 
+	{
+	  if(($afile != ".") and ($afile != ".."))
+	  { 
+	    echo "<option value=\"$afile\">$afile</option>";
+	  }
+	} 
+	echo "</select>";
+}
+
+echo "</div>";
 ?>
-</select>
-</div>
+
 
 <!--
 ################################
@@ -260,19 +266,23 @@ foreach ($afiles as $afile)
 $fafiles = scandir("$subdirectories/fasta_directory"); 
 
 echo "<h4>Choose a fasta:</h4>";
-echo "<select name=\"fafilename\">";
-foreach ($fafiles as $fafile)
-{
-  if (($fafile != ".") and ($fafile != ".."))
-  { 
-    echo "<option value=\"$fafile\">$fafile</option>";
-  }
-} 
+if(count($fafiles)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No fasta files available! (email wtreible@udel.edu)<br>";
+} else {
+	echo "<select name=\"fafilename\">";
+	foreach ($fafiles as $fafile)
+	{
+	  if (($fafile != ".") and ($fafile != ".."))
+	  { 
+	    echo "<option value=\"$fafile\">$fafile</option>";
+	  }
+	} 
+	echo "</select>";
+}
+echo "</div>";
+
+
 ?>
-
-</select>
-
-</div>
 
 <br>
 
