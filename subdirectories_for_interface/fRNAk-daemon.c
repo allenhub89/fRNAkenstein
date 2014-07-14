@@ -19,7 +19,7 @@ main(void) {
 	
 	const char* monitorpath = "/var/www/subdirectories_for_interface/bash_scripts/";
 	const int sleep_running = 15; /* 15 seconds when queued */
-	const int sleep_idle = 300; /* 5 mins when no queue */
+	const int sleep_idle = 15; /* 5 mins when no queue */
 
 	int sleep_time = sleep_running; /* time to sleep */
 	
@@ -55,8 +55,8 @@ main(void) {
 
 
 
-	/* Change the current working directory */
-	/* If failed, exit */
+	/* Change the current working directory 
+	 If failed, exit */
 	if ((chdir("/var/www/subdirectories_for_interface/bash_scripts/")) < 0) {
 		exit(EXIT_FAILURE);
 	}
@@ -69,7 +69,7 @@ main(void) {
 
 	/* Daemon main loop */        		
 	while (1) {
-		//printf("\n===NEW ITERATION===\n");
+		printf("\n===NEW ITERATION===\n");
 		char *files[100];
 		char *ids[100];	
 
@@ -109,7 +109,7 @@ main(void) {
 			int reti,retl;
 			int n_matches = 10;
 			regmatch_t m[n_matches];
-			char * exp = "run_(.*)\\.(.*)\\.diffexp\\.sh";
+			char * exp = "run_(.*)\\.(.*)\\.(.*)\\.sh";
 			
 			/* copy the string so we can
 			   mess with it further down */
@@ -125,7 +125,7 @@ main(void) {
 			assert(retl >= 0);
 			assert(reti >= 0);
 
-			/*printf("len %d, string %s\n", stringlen, sourceCopy);*/
+			printf("len %d, string %s\n", stringlen, sourceCopy);
 			/* length of the first match */
 			int idlen = m[1].rm_eo - m[1].rm_so;
 			/* safe n-length string copy */
@@ -136,8 +136,8 @@ main(void) {
 			char id2[idlen2];
 			*id2 = '\0'; strncat(id2, sourceCopy + m[2].rm_so, idlen2);
 
-			/*printf("ID1: (%s)\n", id1);
-			printf("ID2: (%s)\n", id2);*/
+			printf("ID1: (%s)\n", id);
+			printf("ID2: (%s)\n", id2);
 			/* remove hyphens from id2 (date) */
 			char *s,*d;
 			for ( s=d=id2; (*d=(*s)); (d+=(*s++!='-')) );
