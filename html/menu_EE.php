@@ -98,7 +98,7 @@ do not understand."
 
 <tr>
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
-<a href="log_view.php" class="fRNAkbutton">Status</a>
+<a href="status.php" class="fRNAkbutton">Status</a>
 
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
 "Thus strangely are our souls constructed, and <br>
