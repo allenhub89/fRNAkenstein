@@ -21,7 +21,7 @@ $subdirectories = "/var/www/subdirectories_for_interface";
 
 session_start();
 
-if(empty($_SESSION['user_name']))
+if(empty($_SESSION['user_name']) && !($_SESSION['user_is_logged_in']))
 {
   header('Location: index.php');
 }
@@ -188,17 +188,28 @@ $bashfile = "$subdirectories/bash_scripts/run_$mytimeid.thcl.sh";
 # Append to log output (TH and CL will redirect stderr to log file)
 $logoutput = $logoutput."THCL output...\n";
 
-# Move temp files to output directory only after the library has been crunched	
-# and add to the commands file	
+# Move temp files to output directory only after the library has been crunched
 $thclpath = "$subdirectories/thcl_output";
 $mvcommand = "mv -f $temppath/library_* $thclpath/ >> $logfile 2>&1";
 $outputcommands = $outputcommands.$mvcommand;
 
+# generate the mail commands
+$premailcommand = 'echo "Your THCL run with run ID: '.$mytimeid.' has been started. Estimated time until completion is about 2 hours assuming no other server load. An email will be sent upon completion." | mail -s "fRNAkbox THCL Run" '.$_SESSION['user_email'].'\n';
+ 
+$postmailcommand = '\nif [ $? -eq 0 ]; then 
+echo "Your THCL run with run ID: '.$mytimeid.' completed successfully! You can now run differential expression analysis on this data." | mail -s "fRNAkbox Successful" '.$_SESSION['user_email'].' 
+else 
+echo "Your THCL run with run ID: '.$mytimeid.' was unsuccessful! Please notify an administrator or wtreible@udel.edu with your run ID: '.$mytimeid.'" | mail -s "fRNAkbox Unsuccessful" '.$_SESSION['user_email'].'
+fi';
+
+$outputcommands = $premailcommand.$outputcommands.$postmailcommand;
+
+#generate remove command
+$outputcommands .= "\n rm -f $bashfile";
+
 # Write files
 file_put_contents($logfile, $logoutput);
 file_put_contents($bashfile, $outputcommands, LOCK_EX);
-
-# Test output of commands
 
 ?>
 

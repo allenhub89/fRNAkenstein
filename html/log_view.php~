@@ -31,12 +31,12 @@ session_start();
 #   the root of the file system    #
 ####################################
 
-$subdirectories = "/var/www/subdirectories_for_interface";
-
-if(empty($_SESSION['user_name']))
+if(!($_SESSION['user_name'] == 'fRNAkadmin' || $_SESSION['user_name'] == 'toast'))
 {
-  header('Location: notloggedin.html');
+  header('Location: index.php');
 }
+
+$subdirectories = "/var/www/subdirectories_for_interface";
 
 ?>
 
@@ -129,9 +129,13 @@ foreach ($logfiles as $logfile)
 </form>
 -->
 
+<br> 
+<form action="apache_log.php">
+    <input align = "bottom" type="submit" value="View Apache Log">
+</form>
 <br> <br> <br> <br> <br> <br>
-<form action="menu.php">
-    <input align = "bottom" type="submit" value="Return to Menu">
+<form action="index.php">
+    <input align = "bottom" type="submit" value="Return to Ctrl Panel">
 </form>
 </td>
 

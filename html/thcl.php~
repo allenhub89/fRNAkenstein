@@ -123,6 +123,8 @@ function valthisform()
 <div class='container'>
 
 <?php
+
+echo $_SESSION['user_email'];
 $fqfiles = scandir("$subdirectories/fastq_to_be_crunched");
 
 # Sorts files by "natural human sorting" such that:

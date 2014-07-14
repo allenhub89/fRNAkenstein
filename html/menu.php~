@@ -15,7 +15,7 @@
 session_start();
 if(empty($_SESSION['user_name']))
 {
-  header('Location: notloggedin.html');
+  header('Location: index.php');
 }
 ?>
 <!--
@@ -111,7 +111,7 @@ data using a variety of visualization tools.
 
 <tr>
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
-<a href="log_view.php" class="fRNAkbutton">Status</a>
+<a href="status.php" class="fRNAkbutton">Status</a>
 
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
 View the various output and error logs of your data runs in real-time using the run ID provided in each tool.
