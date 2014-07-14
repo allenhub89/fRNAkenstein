@@ -19,7 +19,7 @@ main(void) {
 	
 	const char* monitorpath = "/var/www/subdirectories_for_interface/bash_scripts/";
 	const int sleep_running = 15; /* 15 seconds when queued */
-	const int sleep_idle = 15; /* 5 mins when no queue */
+	const int sleep_idle = 300; /* 5 mins when no queue */
 
 	int sleep_time = sleep_running; /* time to sleep */
 	
