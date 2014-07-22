@@ -64,7 +64,7 @@ fRNAkenstein - THCL Cruncher
 <!img src="images/favicon.png" alt="fRNAk" width="24" height="24">
 </h3>
 </legend>
-<form id='submitform' onsubmit="return valthisform(this);" action='/thcl_response.php' method='get' target='formresponse'>
+<form id='submitform' onsubmit="return valthisform(this);" action='/thcl_response.php' method='post' target='formresponse'>
 
 
 <input type='hidden' name='submitted' id='submitted' value='1'/>
@@ -226,6 +226,36 @@ function showVal(newVal){
 </div>
 
 <!--
+################################
+# Create DDBox for fasta files #
+################################
+-->
+
+<div class='container'>
+
+<?php
+$fafiles = scandir("$subdirectories/fasta_directory"); 
+
+echo "<h4>Choose a fasta:</h4>";
+if(count($fafiles)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No fasta files available! (email wtreible@udel.edu)<br>";
+} else {
+	echo "<select name=\"fafilename\">";
+	foreach ($fafiles as $fafile)
+	{
+	  if (($fafile != ".") and ($fafile != ".."))
+	  { 
+	    echo "<option value=\"$fafile\">$fafile</option>";
+	  }
+	} 
+	echo "</select>";
+}
+echo "</div>";
+
+
+?>
+
+<!--
 #####################################
 # Create DDBox for annotation files #
 #####################################
@@ -256,39 +286,6 @@ if(count($afiles)<3){ #because of . and .. directories existing
 echo "</div>";
 ?>
 
-
-<!--
-################################
-# Create DDBox for fasta files #
-################################
--->
-
-<div class='container'>
-
-<?php
-$fafiles = scandir("$subdirectories/fasta_directory"); 
-
-echo "<h4>Choose a fasta:</h4>";
-if(count($fafiles)<3){ #because of . and .. directories existing
-	echo "<b>Note:</b> No fasta files available! (email wtreible@udel.edu)<br>";
-} else {
-	echo "<select name=\"fafilename\">";
-	foreach ($fafiles as $fafile)
-	{
-	  if (($fafile != ".") and ($fafile != ".."))
-	  { 
-	    echo "<option value=\"$fafile\">$fafile</option>";
-	  }
-	} 
-	echo "</select>";
-}
-echo "</div>";
-
-
-?>
-
-<br>
-
 <!--
 #######################
 # Annotation Selector #
@@ -297,7 +294,7 @@ echo "</div>";
 
 <h4> Annotation Type: </h4>
 <input type="radio" name="annotationtype" value="ncbi" checked>NCBI <br>
-<input type="radio" name="annotationtype" value="ensembl" >Ensembl <br>
+<input type="radio" name="annotationtype" value="ensembl" >Ensembl <br><br>
 
 
 <!--

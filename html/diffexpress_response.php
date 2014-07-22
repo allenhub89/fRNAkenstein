@@ -73,9 +73,6 @@ if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['fafilename']))))){
 if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['analysisname']))))){
 	exit("<h4>Error 13: No analysis name entered</h4>");
 }
-if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['annotationtype']))))){
-	exit("<h4>Error 14: No annotation type selected</h4>");
-}
 
 ##################################
 # Grab values from HTML elements #
@@ -89,7 +86,6 @@ $procs = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['procs
 $anno = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['afilename']))));
 $fa = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['fafilename']))));
 $analysisname = strip_tags (htmlspecialchars( escapeshellcmd($_POST['analysisname'])));
-$annotype = strip_tags (htmlspecialchars( escapeshellcmd($_POST['annotationtype'])));
 
 ########################
 # Printing information #
@@ -135,10 +131,6 @@ echo "</p>";
 
 echo "<p >";
 echo "Analysis name: $analysisname";
-echo "</p>";
-
-echo "<p >";
-echo "Annotation type: $annotype";
 echo "</p>";
 
 echo "<p>";
@@ -241,49 +233,23 @@ foreach($explibs as $explib)
 $cdcommand = "mkdir -p $cdoutputpath &&\ncuffdiff -p $procs -o $cdoutputpath -L $controlcondition,$expcondition $cmoutputpath/merged.gtf $bampaths &&\n";
 
 ######################
-# HTSeqCount Command #
-######################
-
-$sampath = "$analysispath/sam_output";
-$htseqpath = "$analysispath/htseq_output";
-
-$htseqcommand = "mkdir -p $sampath &&\nmkdir -p $htseqpath &&\n";
-
-foreach($libs as $lib)
-{
-	preg_match("/library_(.*)/",$lib,$match);
-	$library = $match[1];
-
-	$htseqcommand = $htseqcommand."samtools view -h -o $sampath/$library.sam $thclpath/library_$library/tophat_out/accepted_hits.bam &&\n";
-
-	if ($annotype == "ncbi") 
-	{
-		$htseqcommand = $htseqcommand."htseq-count -t gene -i gene $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n";
-
-	}
-	else if ($annotype == "ensembl")
-	{
-		$htseqcommand = $htseqcommand."htseq-count -t gene -i Name $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n"; 
-	}
-}
-
-
-######################
 # Build count matrix #
 ######################
 
+$htseqpath = "$analysispath/htseq_output";
+
 $countmatrixcommand = "python $subdirectories/generate_count_matrix.py ";
+$cpcommand = "mkdir -p $analysispath/htseq_output &&\n";
 
 foreach($libs as $lib)
 {
 	preg_match("/library_(.*)/",$lib,$match);
 	$library = $match[1];
- 	$countmatrixcommand .= "$htseqpath/$library.counts ";
+ 	$countmatrixcommand .= "$subdirectories/thcl_output/library_$library/htseq_output/$library.counts ";
+	$cpcommand .= "cp $subdirectories/thcl_output/library_$library/htseq_output/$library.counts $htseqpath &&\n";
 }
 
-$countmatrixcommand .= "> $htseqpath/count_matrix.txt &&\n";
-
-
+$countmatrixcommand .= "> $htseqpath/count_matrix.txt &&\n".$cpcommand;
 
 ######################
 # R Programs Section #
@@ -420,7 +386,7 @@ $rcommand .= "topCounts(CDPost.NBML, group=2)\n";
 $rcommand .= "blah <- topCounts(CDPost.NBML,group=\"DE\",FDR=1) \n"; 
 $rcommand .= "as.matrix(blah) \n";
 $rcommand .= "colnames(blah) <-c(\"geneName\",$controllist,$explist,\"likelihood\",\"FDR\") \n";
-$rcommand .= "write.csv(blah, file=\"$rpath/bayseq_de_analyzed_dataset_$analysisname.csv\") \n"; 
+$rcommand .= "write.csv(blah, file=\"$rpath/bayseq.txt\") \n"; 
 
 
 ###################
@@ -436,7 +402,7 @@ $rcommand .= "dds<-DESeq(ddsHTSeq) \n";
 $rcommand .= "res<-results(dds) \n"; 
 $rcommand .= "res<-res[order(res\$padj),] \n"; 
 $rcommand .= "head(res) \n"; 
-$rcommand .= "write.table (as.data.frame(res), file=\"$rpath/results_deseq2.txt\") \n"; 
+$rcommand .= "write.table (as.data.frame(res), file=\"$rpath/deseq2.txt\") \n"; 
 
 ##################
 # EdgeR Commands #
@@ -453,7 +419,7 @@ $rcommand .= "dge = estimateCommonDisp(dge) \n";
 $rcommand .= "de.com = exactTest(dge)   \n"; 
 $rcommand .= "topTags(de.com)  \n"; 
 $rcommand .= "goodList = topTags(de.com, n=\"good\") \n"; 
-$rcommand .= "write.table (as.data.frame(goodList), file=\"$rpath/edgeR.txt\") \n"; 
+$rcommand .= "write.table (as.data.frame(goodList), file=\"$rpath/edger.txt\") \n"; 
 
 
 # Compile all commands together

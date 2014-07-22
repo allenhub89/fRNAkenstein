@@ -416,6 +416,36 @@ function showVal(newVal){
 </div>
 
 <!--
+################################
+# Create DDBox for fasta files #
+################################
+-->
+
+<div class='container'>
+
+<?php
+$fafiles = scandir("$subdirectories/fasta_directory"); 
+
+echo "<h4>Choose a fasta:</h4>";
+if(count($fafiles)<3){ #because of . and .. directories existing
+	echo "<b>Note:</b> No fasta files available! (email wtreible@udel.edu)<br>";
+} else {
+	echo "<select name=\"fafilename\">";
+	foreach ($fafiles as $fafile)
+	{
+	  if (($fafile != ".") and ($fafile != ".."))
+	  { 
+	    echo "<option value=\"$fafile\">$fafile</option>";
+	  }
+	} 
+	echo "</select>";
+}
+
+?>
+
+</div>
+
+<!--
 #####################################
 # Create DDBox for annotation files #
 #####################################
@@ -446,52 +476,12 @@ if(count($afiles)<3){ #because of . and .. directories existing
 </div>
 
 <!--
-################################
-# Create DDBox for fasta files #
-################################
--->
-
-<div class='container'>
-
-<?php
-$fafiles = scandir("$subdirectories/fasta_directory"); 
-
-echo "<h4>Choose a fasta:</h4>";
-if(count($afiles)<3){ #because of . and .. directories existing
-	echo "<b>Note:</b> No fasta files available! (email wtreible@udel.edu)<br>";
-} else {
-	echo "<select name=\"fafilename\">";
-	foreach ($fafiles as $fafile)
-	{
-	  if (($fafile != ".") and ($fafile != ".."))
-	  { 
-	    echo "<option value=\"$fafile\">$fafile</option>";
-	  }
-	} 
-	echo "</select>";
-}
-
-?>
-
-</div>
-
-<!--
 #################
 # Analysis Name #
 #################
 -->
 
 <h4>Analysis Name:</h4> <input type="text" name="analysisname"><br>
-
-<!--
-#######################
-# Annotation Selector #
-#######################
--->
-
-<h4> Annotation Type: </h4>
-<input type="radio" name="annotationtype" value="ncbi" checked>NCBI <br>
-<input type="radio" name="annotationtype" value="ensembl" >Ensembl <br>
 
 <!--
 #################

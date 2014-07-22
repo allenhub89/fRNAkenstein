@@ -31,16 +31,16 @@ if(empty($_SESSION['user_name']) && !($_SESSION['user_is_logged_in']))
 # Some error checking redundancy on inputs #
 ############################################
 
-if(empty($_GET['fqfilename'])){
+if(empty($_POST['fqfilename'])){
 	exit("<h4>Error 1: No Fastq file selected</h4>");
 }
-if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['procs']))))){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['procs']))))){
 	exit("<h4>Error 2: Number of proccessors error</h4>");
 }
-if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['afilename']))))){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['afilename']))))){
 	exit("<h4>Error 3: No annotation file selected</h4>");
 }
-if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['fafilename']))))){
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['fafilename']))))){
 	exit("<h4>Error 4: No Fasta file selected</h4>");
 }
 if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['annotationtype']))))){
@@ -51,10 +51,10 @@ if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['annotationtype']))
 # Grab values from HTML elements #
 ##################################
 
-$fqarray = $_GET['fqfilename'];
-$procs = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['procs']))));
-$anno = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['afilename']))));
-$fa = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['fafilename']))));
+$fqarray = $_POST['fqfilename'];
+$procs = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['procs']))));
+$anno = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['afilename']))));
+$fa = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['fafilename']))));
 $annotype = strip_tags (htmlspecialchars( escapeshellcmd($_POST['annotationtype'])));
 
 ########################
@@ -81,11 +81,15 @@ echo "Annotation file: $anno";
 echo "</p>";
 
 echo "<p >";
+echo "Annotation type: $annotype";
+echo "</p>";
+
+echo "<p >";
 echo "Fasta file: $fa";
 echo "</p>";
 
 echo "<p>";
-echo "<b>NOTE:</b><br>Running the pipeline will take a long time; <br>results will be emailed automatically upon conclusion!";
+echo "<b>NOTE:</b><br>Running the pipeline will take a long time; <br> An email will be sent when your run completes.";
 echo "</p>";
 
 echo "</div>";
@@ -97,15 +101,14 @@ echo "</div>";
 # Initialize output command string
 $outputcommands = "";
 
-
-
 # Generate a unique ID based on the time and echo it
 $mytimeid = date('his.m-d-Y');
 echo "<b>Your run ID is: </b> $mytimeid<br><br>";
 
 # Create log path and initialize it
 $logfile = "$subdirectories/logs/$mytimeid.thcl.log";
-$logoutput = "Bash commands...\n";
+$logoutput = "User: ".$_SESSION['user_name']."\n";
+$logoutput .= "Bash commands...\n";
 
 # Temp output path
 $temppath = "$subdirectories/temp_output";
@@ -168,23 +171,43 @@ foreach($fqarray as $fqoriginal) {
 		# Generate location for output files
 		$thoutputfile = "$temppath/library_$library/tophat_out";
 		$cloutputfile = "$temppath/library_$library/cufflinks_out";
+		$sampath = "$temppath/library_$library/sam_output";
+		$htseqpath = "$temppath/library_$library/htseq_output";
+
+		# Generate mkdir commands for new directories
+		# -p option prevents errors with pre-existing folders
+		$makedirs = "mkdir -p $temppath/library_$library &&\nmkdir -p $cloutputfile && mkdir -p $thoutputfile &&\n";
+		$makedirs .= "mkdir -p $sampath && mkdir -p $htseqpath";
 
 		# Generate commands for TH and CL
 		$thcommand = "tophat -p $procs -o $thoutputfile $fapath $fqpath";
 		$clcommand = "cufflinks -p $procs -g $annopath -o $cloutputfile $thoutputfile/accepted_hits.bam";
 
-		# Generate mkdir commands for new directories
-		# -p option prevents errors with pre-existing folders
-		$makedirs = "mkdir -p $temppath/library_$library && mkdir -p $cloutputfile && mkdir -p $thoutputfile";
+		# Generate HTSeq commands
+		$htseqcommand = "samtools view -h -o $sampath/$library.sam $thoutputfile/accepted_hits.bam &&\n";
+		if ($annotype == "ncbi") 
+		{
+			$htseqcommand = $htseqcommand."htseq-count -t gene -i gene $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n";
+		}
+		else if ($annotype == "ensembl")
+		{
+			$htseqcommand = $htseqcommand."htseq-count -t gene -i Name $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n"; 
+		}
+
+		# Move temp files to output directory only after the library has been crunched
+		$mvcommand = "mv -f $temppath/library_$library $subdirectories/thcl_output/ >> $logfile 2>&1 &&\n";		
 
 		# Append library commands to the output command string
-		$singleoutputcommand = "$makedirs &&\n$thcommand >> $logfile 2>&1 && $clcommand >> $logfile 2>&1 &&\n";
-		$outputcommands = $outputcommands.$movecommand.$singleoutputcommand;
+		$singleoutputcommand = "$makedirs &&\n$thcommand >> $logfile 2>&1 && $clcommand >> $logfile 2>&1 &&\n".$htseqcommand;
+		$outputcommands = $outputcommands.$movecommand.$singleoutputcommand.$mvcommand;
 
 		# Build log output
 		$logoutput = $logoutput."Fastq file: $fqoriginal\n"."Command generated: ".$singleoutputcommand;
 	}
 }
+
+# Add noop to the end to catch extra && chaining
+$outputcommands .= ":";
 
 # Create bash file output directory
 $bashfile = "$subdirectories/bash_scripts/run_$mytimeid.thcl.sh";
@@ -192,10 +215,6 @@ $bashfile = "$subdirectories/bash_scripts/run_$mytimeid.thcl.sh";
 # Append to log output (TH and CL will redirect stderr to log file)
 $logoutput = $logoutput."THCL output...\n";
 
-# Move temp files to output directory only after the library has been crunched
-$thclpath = "$subdirectories/thcl_output";
-$mvcommand = "mv -f $temppath/library_* $thclpath/ >> $logfile 2>&1";
-$outputcommands = $outputcommands.$mvcommand;
 
 # generate the mail commands
 $premailcommand = 'echo "Your THCL run with run ID: '.$mytimeid.' has been started. Estimated time until completion is about 2 hours assuming no other server load. An email will be sent upon completion." | mail -s "fRNAkbox THCL Run" '.$_SESSION['user_email']."\n";
