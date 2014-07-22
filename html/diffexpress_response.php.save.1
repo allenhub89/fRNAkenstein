@@ -98,7 +98,7 @@ $annotype = strip_tags (htmlspecialchars( escapeshellcmd($_POST['annotationtype'
 echo "<body >";
 echo "<div id='result_div'>";
 echo "<h4>Crunching library with data:</h4>";
-
+	
 echo "<p >";
 echo "Control condition: $controlcondition";
 echo "</p>";
@@ -140,11 +140,11 @@ echo "</p>";
 echo "<p >";
 echo "Annotation type: $annotype";
 echo "</p>";
-
+	
 echo "<p>";
-echo "<b>NOTE:</b><br>Running the pipeline will take a long time!";
+echo "<b>NOTE:</b><br>Running the pipeline will take a long time! When your run is f";
 echo "</p>";
-
+	
 echo "</div>";
 
 ##########################################
@@ -192,6 +192,7 @@ foreach($libs as $lib)
 
 $initialcommand = "mkdir -p $analysispath &&\n";
 $initialcommand .= "echo \"$manifest\" > $manifestpath &&\n";
+#file_put_contents($manifestpath, $manifest, LOCK_EX);
 
 ##############################
 # Annotation and fasta paths #
@@ -248,23 +249,23 @@ $sampath = "$analysispath/sam_output";
 $htseqpath = "$analysispath/htseq_output";
 
 $htseqcommand = "mkdir -p $sampath &&\nmkdir -p $htseqpath &&\n";
-
+    
 foreach($libs as $lib)
 {
 	preg_match("/library_(.*)/",$lib,$match);
 	$library = $match[1];
-
+	
 	$htseqcommand = $htseqcommand."samtools view -h -o $sampath/$library.sam $thclpath/library_$library/tophat_out/accepted_hits.bam &&\n";
 
 	if ($annotype == "ncbi") 
-	{
+	{ 
 		$htseqcommand = $htseqcommand."htseq-count -t gene -i gene $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n";
 
-	}
-	else if ($annotype == "ensembl")
-	{
+	} 
+	else if ($annotype == "ensembl") 
+	{ 
 		$htseqcommand = $htseqcommand."htseq-count -t gene -i Name $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n"; 
-	}
+	} 
 }
 
 

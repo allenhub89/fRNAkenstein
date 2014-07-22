@@ -60,7 +60,7 @@ $fa = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['fafilenam
 echo "<body >";
 echo "<div id='result_div'>";
 echo "<h4>Crunching library with data:</h4>";
-	
+
 echo "<p>";
 echo "Library file(s) selected: <br>";
 foreach ($fqarray as $fqfile){
@@ -79,11 +79,11 @@ echo "</p>";
 echo "<p >";
 echo "Fasta file: $fa";
 echo "</p>";
-	
+
 echo "<p>";
 echo "<b>NOTE:</b><br>Running the pipeline will take a long time; <br>results will be emailed automatically upon conclusion!";
 echo "</p>";
-	
+
 echo "</div>";
 
 ##########################
@@ -117,7 +117,7 @@ foreach($fqarray as $fqoriginal) {
 	$fqdoublestranded = explode("&", $fqoriginal);
 	# don't like this but it needs to be done for clarity below
 	$fq = $fqdoublestranded[0];
-	
+
 	# Check if fastq file is zipped
 	if (preg_match("/\.gz/", $fq)!=1 ){
 		exit("Error 5: Fastq file not gzipped (.gz)");
@@ -131,10 +131,10 @@ foreach($fqarray as $fqoriginal) {
 			if(preg_match("/\.gz/", $fqpath)==1 and preg_match("/\.gz/", $fqpath2strand)==1){
 				system("mv $fqpath $temppath/$fqdoublestranded[0]");
 				system("mv $fqpath2strand $temppath/$fqdoublestranded[1]");
-				
-				$movecommand .= "gunzip $temppath/*.gz &&\n";;
+
+				$movecommand .= "gunzip $temppath/\*.gz &&\n";
 				$fq = preg_replace("/.gz/","",$fq);
-				$fq2 = preg_replace("/.gz/","",$fqdoublestranded[1]);	
+				$fq2 = preg_replace("/.gz/","",$fqdoublestranded[1]);
 				$fqpath = "$temppath/$fq";
 				$fqpath2strand = "$temppath/$fq2";
 				$fqpath = $fqpath." ".$fqpath2strand;
@@ -153,7 +153,7 @@ foreach($fqarray as $fqoriginal) {
 
 			}
 		}
-		
+
 		# Generate other file paths for annotation and fasta files
 		$annopath = "$subdirectories/annotation_directory/$anno";
 		$fapath = "$subdirectories/fasta_directory/$fa/$fa";
@@ -168,7 +168,7 @@ foreach($fqarray as $fqoriginal) {
 		# Generate commands for TH and CL
 		$thcommand = "tophat -p $procs -o $thoutputfile $fapath $fqpath";
 		$clcommand = "cufflinks -p $procs -g $annopath -o $cloutputfile $thoutputfile/accepted_hits.bam";
-	
+
 		# Generate mkdir commands for new directories
 		# -p option prevents errors with pre-existing folders
 		$makedirs = "mkdir -p $temppath/library_$library && mkdir -p $cloutputfile && mkdir -p $thoutputfile";
@@ -176,7 +176,7 @@ foreach($fqarray as $fqoriginal) {
 		# Append library commands to the output command string
 		$singleoutputcommand = "$makedirs &&\n$thcommand >> $logfile 2>&1 && $clcommand >> $logfile 2>&1 &&\n";
 		$outputcommands = $outputcommands.$movecommand.$singleoutputcommand;
-	
+
 		# Build log output
 		$logoutput = $logoutput."Fastq file: $fqoriginal\n"."Command generated: ".$singleoutputcommand;
 	}
@@ -194,18 +194,18 @@ $mvcommand = "mv -f $temppath/library_* $thclpath/ >> $logfile 2>&1";
 $outputcommands = $outputcommands.$mvcommand;
 
 # generate the mail commands
-$premailcommand = 'echo "Your THCL run with run ID: '.$mytimeid.' has been started. Estimated time until completion is about 2 hours assuming no other server load. An email will be sent upon completion." | mail -s "fRNAkbox THCL Run" '.$_SESSION['user_email'].'\n';
- 
-$postmailcommand = '\nif [ $? -eq 0 ]; then 
-echo "Your THCL run with run ID: '.$mytimeid.' completed successfully! You can now run differential expression analysis on this data." | mail -s "fRNAkbox Successful" '.$_SESSION['user_email'].' 
-else 
-echo "Your THCL run with run ID: '.$mytimeid.' was unsuccessful! Please notify an administrator or wtreible@udel.edu with your run ID: '.$mytimeid.'" | mail -s "fRNAkbox Unsuccessful" '.$_SESSION['user_email'].'
+$premailcommand = 'echo "Your THCL run with run ID: '.$mytimeid.' has been started. Estimated time until completion is about 2 hours assuming no other server load. An email will be sent upon completion." | mail -s "fRNAkbox THCL Run" '.$_SESSION['user_email']."\n";
+
+$postmailcommand = "\n".'if [ $? -eq 0 ]; then
+	echo "Your THCL run with run ID: '.$mytimeid.' completed successfully! You can now run differential expression analysis on this data." | mail -s "fRNAkbox Successful" '.$_SESSION['user_email'].' 
+else
+	echo "Your THCL run with run ID: '.$mytimeid.' was unsuccessful! Please notify an administrator or wtreible@udel.edu with your run ID: '.$mytimeid.'" | mail -s "fRNAkbox Unsuccessful" '.$_SESSION['user_email'].'
 fi';
 
 $outputcommands = $premailcommand.$outputcommands.$postmailcommand;
 
 #generate remove command
-$outputcommands .= "\n rm -f $bashfile";
+$outputcommands = "rm -f $bashfile\n".$outputcommands;
 
 # Write files
 file_put_contents($logfile, $logoutput);

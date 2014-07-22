@@ -46,8 +46,11 @@ function point_it(event){
 		if(pos_y >= 3 && pos_y <= 102 && pos_x >= 172 && pos_x <= 252)
 		{
 			//FASTQ FILE
+			// # = id ; $(<x>) = reference to element
+			// #dialog = ref to dialog element
 			$( "#dialog" ).dialog( "open" );
 			$("#dialog p").text("FASTQ format is a text-based format for storing both a biological sequence and its corresponding quality scores. The FASTQ file is the input library for Tophat.");
+			//make dialog box an option box, set the title to 'Fastq file'
 			$('#dialog').dialog('option', 'title', 'Fastq File');
 			return;
 		}

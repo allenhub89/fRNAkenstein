@@ -142,11 +142,13 @@ if(count($fqfiles)<3){ #because of . and .. directories existing
 	# else, list the files
 	foreach($fqfiles as $fqfile)
 	{
+		# *** TO FIX ***
 		# Modifying arrays while 'foreach' iterating is broken in php
 		# -> It buffers the array at the foreach call and iterates over 
 		# -> potentially old or modified data (bad, php!)
 		# This double checks that the element is in the new fqfiles array 
 		# to fix this minor annoying problem...
+		# Edit: I was an idiot, but I guess this still works
 		if (($key = array_search($fqfile, $fqfiles)) !== false) 
 		{
 			$doublestranded = 0;

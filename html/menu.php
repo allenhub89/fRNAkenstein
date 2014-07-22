@@ -60,7 +60,7 @@ Welcome to fRNAkenstein!
 <tr>
 <td colspan="3" valign="middle" bgcolor="#d0eace" style="border:outset;padding-top:24px;padding-bottom:24px;padding-left:24px;padding-right:12px;width:500px;height=160px;">
 
-A leightweight, clean, and easy-to-use interface for RNA sequencing 
+A lightweight, clean, and easy-to-use interface for RNA sequencing 
 and differential expression using state-of-the-art tools to turn
 your data into visible results.
 <div align="right">-The fRNAkenstein Team </div>
@@ -152,10 +152,11 @@ Contact information for the fRNAkenstein team and references to the tools used.
 <img src="images/chicken.jpg" alt="SchmidtLab" width="160" height="125" > </td>
 <img src="images/USDA.jpg" alt="USDA" width="266" height="125"> 
 <img src="images/NSF.jpg" alt="NSF" width="125" height="125"> <br>
-<p align="center" ><font size="1">- NSF award: 1147029 :: NIFA award: 2010-04233 - </font></p>
+<p align="center" ><font size="1">- NSF award: 1147029 :: USDA-NIFA-AFRI: 2011-67003-30228 - </font></p>
 <form method="get" action="/menu_EE.php">
     <button type="submit" style="position:absolute;right:0px;bottom:0px;background: transparent;border: none !important;width:170px;height:170px;font-size:0;"></button>
 </form>
 </body>
+
 
 

@@ -466,8 +466,8 @@ class OneFileLoginApplication
 	<img src="images/chicken.jpg" alt="SchmidtLab" width="160" height="125" > </td>
 	<img src="images/USDA.jpg" alt="USDA" width="266" height="125"> 
 	<img src="images/NSF.jpg" alt="NSF" width="125" height="125"> <br>
-	<p align="center" ><font size="1">- NSF award: 1147029 :: NIFA award: 2010-04233 - </font></p></fieldset>';
-	
+	<p align="center" ><font size="1">- NSF award: 1147029 :: USDA-NIFA-AFRI: 2011-67003-30228 - </font></p></fieldset>';
+
 	#echo '<form action="contact.html">';
 	#echo '<input type="submit" name ="about" value="About fRNAkenstein"></form>';
         #echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '?action=register">Register new account</a>';
