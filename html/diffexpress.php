@@ -20,7 +20,7 @@ session_start();
 #   --annotation_directory/        #
 #   --temp_output/                 #
 #   --bash_scripts/                #
-#   --thcl_output/                 #
+#   --mapcount_output/             #
 #   --logs/                        #
 #                                  #
 # Modify $subdirectories to change #
@@ -53,7 +53,7 @@ fRNAkenstein - DiffExpress
 
 <?php
 # Can modify later with real values
-$archivedlibs = scandir("$subdirectories/thcl_output");
+$archivedlibs = scandir("$subdirectories/mapcount_output");
 $archivedlibs = preg_replace(array("/(.*)library_/","/\./","/\.\./"), "", $archivedlibs);
 
 ?>
@@ -244,7 +244,7 @@ fRNAkenstein - DiffExpress
 <h4>Control Condition:</h4> <input type="text" name="controlcondition"><br>
 
 <?php
-$controllibs = scandir("$subdirectories/thcl_output");
+$controllibs = scandir("$subdirectories/mapcount_output");
 
 # Sorts files by "natural human sorting" such that:
 # 1.ext                       1.ext
@@ -311,7 +311,7 @@ if(count($controllibs)<3){ #because of . and .. directories existing
 <h4>Experimental Condition:</h4> <input type="text" name="expcondition"><br>
 
 <?php
-$explibs = scandir("$subdirectories/thcl_output");
+$explibs = scandir("$subdirectories/mapcount_output");
 
 # Sorts files by "natural human sorting" such that:
 # 1.ext                       1.ext

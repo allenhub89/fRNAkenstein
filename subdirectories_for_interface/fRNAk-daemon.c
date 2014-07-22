@@ -57,7 +57,7 @@ main(void) {
 
 	/* Change the current working directory 
 	 If failed, exit */
-	if ((chdir("/var/www/subdirectories_for_interface/bash_scripts/")) < 0) {
+	if ((chdir(monitorpath)) < 0) {
 		exit(EXIT_FAILURE);
 	}
 
@@ -69,7 +69,7 @@ main(void) {
 
 	/* Daemon main loop */        		
 	while (1) {
-		printf("\n===NEW ITERATION===\n");
+		//printf("\n===NEW ITERATION===\n");
 		char *files[100];
 		char *ids[100];	
 

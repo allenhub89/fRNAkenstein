@@ -156,7 +156,7 @@ function point_it(event){
 
 
 </head>
-<body >
+<body bgcolor="DarkGray">
 <center>
 <!--
 ###########################
@@ -171,7 +171,7 @@ function point_it(event){
 <div>
 <fieldset class="fieldset-auto-width">
 <legend>
-<h3 style="background-color:white;">
+<h3>
 <!img src="/favicon.png" alt="fRNAk" width="24" height="24"> 
 The fRNAkenstein Pipeline
 <!img src="/favicon.png" alt="fRNAk" width="24" height="24">

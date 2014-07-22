@@ -29,6 +29,17 @@
     font-weight: bold;
     text-shadow: 1px 1px 0 #fff;
 }
+
+table
+{
+border:ridge;
+}
+th,td
+{
+border:1px solid black;
+padding:5px;
+}
+
 </style>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
@@ -86,12 +97,18 @@ $subdirectories = "/var/www/subdirectories_for_interface";
 $scripts = scandir("$subdirectories/bash_scripts");
 
 
-$fRNAkrunning = exec("ps aux | grep -E '[r]un_(.*)\.(thcl|diffexp)\.sh' ", $outputs);
+$fRNAkrunning = exec("ps aux | grep -E '[r]un_(.*)\.(mapcount|diffexp)\.sh' ", $outputs);
+
 if ( empty($fRNAkrunning) && count($outputs) == 0 && empty($scripts))
 {
 	echo "No processes currently queued or running!<br>";
 } 
 else {
+
+	echo "<table>";
+	echo "<tr>";
+	echo "<th>ID</th><th>Type</th><th>User</th><th>Started</th><th>Status</th>";
+	echo "</tr>";
 	$files = array();
 	if (!empty($fRNAkrunning) && count($outputs) > 0)
 	{
@@ -101,13 +118,15 @@ else {
 			$file = $match[1];
 			if($match[3] != '*')
 			{
+				echo "<tr>";
 				array_push($files, $file);
 				$id = $match[2];
-				echo "ID: ".$id." is <font color='green'><b>running</b></font>!<br><br>";
-				echo "<div id=\"progressbar\">";
+				$type = $match[3];
+				echo "<td>$id</td><td>$type</td><td>USER</td><td>TIME</td><td><font color='green'><b>Running</b></font>!</td></tr>";
+				/*echo "<div id=\"progressbar\">";
 				echo "    <div class=\"progress-label\">0%</div>";
 				echo "</div>";
-				echo "</div><br><br><center>";
+				echo "</div><br><br><center>";*/
 			}
 		}
 	}
@@ -124,11 +143,12 @@ else {
 					{
 						if($file != $script)
 						{
-							preg_match("/run_(.*)\.sh/",$script,$match);
-							$id = $match[1];
+							preg_match("/(run_(.*)\.(.*)\.sh)/",$script,$match);
+							$id = $match[2];
+							$type = $match[3];
 							if($id != '')
 							{
-								echo "ID: ".$id." is <font color='red'><b>queued</b></font>!<br><br>";
+								echo "<td>$id</td><td>$type</td><td>USER</td><td>TIME</td><td><font color='red'><b>Queued</b></font>!</td></tr>";
 								unset($files[$file]);
 							}
 						}
@@ -136,13 +156,14 @@ else {
 				}
 				else
 				{
-					preg_match("/run_(.*).sh/",$script,$match);
+					preg_match("/(run_(.*)\.(.*)\.sh)/",$script,$match);
 					if (count($match) > 0)
 					{
-						$id = $match[1];
+						$id = $match[2];
+						$type = $match[3];
 						if($id != '')
 						{
-							echo "ID: ".$id." is <font color='red'><b>queued</b></font>!<br><br>";
+							echo "<td>$id</td><td>$type</td><td>USER</td><td>TIME</td><td><font color='red'><b>Queued</b></font>!</td></tr>";
 						}
 					}
 				}
@@ -151,6 +172,8 @@ else {
 	}
 
 }
+
+echo "</table>";
 
 ?>
 

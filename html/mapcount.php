@@ -43,7 +43,7 @@ fRNAkenstein - MapCount Cruncher
 <link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
 </head>
-<body>
+<body bgcolor="DarkGray">
 <center>
 <!--
 ############################
@@ -59,9 +59,7 @@ fRNAkenstein - MapCount Cruncher
 <fieldset class="fieldset-auto-width">
 <legend>
 <h3>
-<!img src="images/favicon.png" alt="fRNAk" width="24" height="24"> 
 fRNAkenstein - MapCount Cruncher
-<!img src="images/favicon.png" alt="fRNAk" width="24" height="24">
 </h3>
 </legend>
 <form id='submitform' onsubmit="return valthisform(this);" action='/mapcount_response.php' method='post' target='formresponse'>

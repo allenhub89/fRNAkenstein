@@ -19,17 +19,21 @@ $subdirectories = "/var/www/subdirectories_for_interface/";
 $analysisoutput = "$subdirectories/diffexpress_output";
 
 if(empty($_GET['analysis'])){
-#	exit("<h4>Error: No analysis file selected</h4>");
+	exit("<h4>Error: Invalid link.</h4>");
 }
 
-$analysis = "analysis_a1steaksauce";#$_GET['analysis'];
+$analysis = htmlspecialchars($_GET['analysis']);
 
 $analysispath = "$analysisoutput/$analysis/out.txt";
 
 
 $fh = fopen($analysispath, 'r');
 $read = file_get_contents($analysispath);
-#$read = preg_replace('/\s+/', '\t', $read);
+
+if(empty($read)){
+	exit("<h4>Error: Invalid link.</h4>");
+}
+
 $lines = explode("\n", $read);
 
 ini_set('memory_limit', '512M');
@@ -41,12 +45,6 @@ foreach($lines as $key => $value)
 	$rows[$i] = explode("\t", $temp);
 	$i++;
 }
-
-
-#echo "<pre>";
-#print_r($lines); //explore results
-#echo "</pre>";
-
 
 echo "<table border='3' style='width:300px;'>";
 
@@ -63,8 +61,5 @@ foreach ($rows as $row)
 	echo "</tr>";
 }
 echo "</table>";
-
-
-
 
 ?>

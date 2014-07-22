@@ -217,12 +217,12 @@ $logoutput = $logoutput."MapCount output...\n";
 
 
 # generate the mail commands
-$premailcommand = 'echo "Your MapCount run with run ID: '.$mytimeid.' has been started. Estimated time until completion is about 2 hours assuming no other server load. An email will be sent upon completion." | mail -s "fRNAkbox MapCount Run" '.$_SESSION['user_email']."\n";
+$premailcommand = 'echo "Your MapCount run with ID: '.$mytimeid.' has been started by user '.$_SESSION['user_name'].'. An email will be sent to this address upon completion." | mail -s "fRNAkbox MapCount Run" '.$_SESSION['user_email']."\n";
 
 $postmailcommand = "\n".'if [ $? -eq 0 ]; then
-	echo "Your MapCount run with run ID: '.$mytimeid.' completed successfully! You can now run differential expression analysis on this data." | mail -s "fRNAkbox Successful" '.$_SESSION['user_email'].' 
+	echo "Your MapCount run with ID: '.$mytimeid.' completed successfully! You can now run differential expression analysis on this data!" | mail -s "fRNAkbox MapCount Successful" '.$_SESSION['user_email'].' 
 else
-	echo "Your MapCount run with run ID: '.$mytimeid.' was unsuccessful! Please notify an administrator or wtreible@udel.edu with your run ID: '.$mytimeid.'" | mail -s "fRNAkbox Unsuccessful" '.$_SESSION['user_email'].'
+	echo "Your MapCount run with ID: '.$mytimeid.' was unsuccessful! Please email an administrator with your run ID and subject line \"fRNAkenstein error\"" | mail -s "fRNAkbox MapCount Unsuccessful" '.$_SESSION['user_email'].'
 fi';
 
 $outputcommands = $premailcommand.$outputcommands.$postmailcommand;

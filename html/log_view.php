@@ -24,7 +24,7 @@ session_start();
 #   --annotation_directory/        #
 #   --temp_output/                 #
 #   --bash_scripts/                #
-#   --thcl_output/                 #
+#   --mapcount_output/                 #
 #   --logs/                        #
 #                                  #
 # Modify $subdirectories to change #

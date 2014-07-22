@@ -33,7 +33,7 @@ fRNAkenstein:"Beware; for I am fearless, and therefore powerful."
 <!link rel="STYLESHEET" type="text/css" href="css_dir/background.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
 </head>
-<body >
+<body bgcolor="DarkGray">
 <!simg src="images/chicken.jpg" alt="NSF" width="100" height="100"> 
 <center>
 <!--
@@ -49,7 +49,7 @@ fRNAkenstein:"Beware; for I am fearless, and therefore powerful."
 <div>
 <fieldset class="fieldset-auto-width">
 <legend>
-<h3 style="background-color:white;">
+<h3>
 <!img src="/favicon.png" alt="fRNAk" width="24" height="24"> 
 Welcome to fRNAkenstein!
 <!img src="/favicon.png" alt="fRNAk" width="24" height="24">
@@ -81,7 +81,7 @@ how to use the front-end interface step-by-step.
 
 <tr>
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
-<a href="thcl.php" class="fRNAkbutton">Tophat & Cufflinks</a>
+<a href="mapcount.php" class="fRNAkbutton">MapCount</a>
 
 </td>
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">

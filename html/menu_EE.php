@@ -66,8 +66,8 @@ acquire and transmit over the elemental foes of our race."
 </tr>
 
 <tr>
-<td valign="middle"  style="padding-top:24px;padding-left:8px;width:50px;">
-<a href="thcl.php" class="fRNAkbutton">Tophat & Cufflinks</a>
+<td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
+<a href="mapcount.php" class="fRNAkbutton">MapCount</a>
 
 </td>
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">

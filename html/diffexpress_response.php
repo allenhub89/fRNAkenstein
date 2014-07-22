@@ -9,7 +9,8 @@
 #   --annotation_directory/        #
 #   --temp_output/                 #
 #   --bash_scripts/                #
-#   --thcl_output/                 #
+#   --mapcount_output/             #
+#   --diffexpress_output/          #
 #   --logs/                        #
 #                                  #
 # Modify $subdirectories to change #
@@ -87,6 +88,17 @@ $anno = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['afilen
 $fa = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_POST['fafilename']))));
 $analysisname = strip_tags (htmlspecialchars( escapeshellcmd($_POST['analysisname'])));
 
+##############################################
+# Set Analysis Path and MapCount Output Path #
+##############################################
+
+$analysispath = "$subdirectories/temp_output/analysis_$analysisname";
+$mapcountpath = "$subdirectories/mapcount_output";
+
+if(file_exists ( $analysispath )){
+	exit("<h4>Error: Analysis name already in use!</h4>");
+}
+
 ########################
 # Printing information #
 ########################
@@ -139,12 +151,6 @@ echo "</p>";
 
 echo "</div>";
 
-##########################################
-# Set Analysis Path and THCL Output Path #
-##########################################
-
-$analysispath = "$subdirectories/temp_output/analysis_$analysisname";
-$thclpath = "$subdirectories/thcl_output";
 
 #################################
 # Log initialization and run ID #
@@ -178,9 +184,8 @@ $manifestpath = "$analysispath/manifest.txt";
 
 foreach($libs as $lib)
 {
-  $manifest .= "$thclpath/$lib/cufflinks_out/transcripts.gtf\n";
+  $manifest .= "$mapcountpath/$lib/cufflinks_out/transcripts.gtf\n";
 }
-
 
 $initialcommand = "mkdir -p $analysispath &&\n";
 $initialcommand .= "echo \"$manifest\" > $manifestpath &&\n";
@@ -210,7 +215,7 @@ $bampaths = "";
 $count = 0;
 foreach($controllibs as $controllib)
 {
-  $bampaths = $bampaths."$thclpath/$controllib/tophat_out/accepted_hits.bam";
+  $bampaths = $bampaths."$mapcountpath/$controllib/tophat_out/accepted_hits.bam";
   $count = $count + 1;
   if ($count < count($controllibs))
   {
@@ -222,7 +227,7 @@ $bampaths = $bampaths." ";
 $count = 0;
 foreach($explibs as $explib)
 {
-  $bampaths = $bampaths."$thclpath/$explib/tophat_out/accepted_hits.bam";
+  $bampaths = $bampaths."$mapcountpath/$explib/tophat_out/accepted_hits.bam";
   $count = $count + 1;
   if ($count < count($explibs))
   {
@@ -245,8 +250,8 @@ foreach($libs as $lib)
 {
 	preg_match("/library_(.*)/",$lib,$match);
 	$library = $match[1];
- 	$countmatrixcommand .= "$subdirectories/thcl_output/library_$library/htseq_output/$library.counts ";
-	$cpcommand .= "cp $subdirectories/thcl_output/library_$library/htseq_output/$library.counts $htseqpath &&\n";
+ 	$countmatrixcommand .= "$subdirectories/mapcount_output/library_$library/htseq_output/$library.counts ";
+	$cpcommand .= "cp $subdirectories/mapcount_output/library_$library/htseq_output/$library.counts $htseqpath &&\n";
 }
 
 $countmatrixcommand .= "> $htseqpath/count_matrix.txt &&\n".$cpcommand;
@@ -432,18 +437,27 @@ $commands .= "rm -f $subdirectories/bash_scripts/r_$mytimeid.R &&\n";
 # Create bash file output directory
 $bashfile = "$subdirectories/bash_scripts/run_$mytimeid.diffexp.sh";
 
+# Create results path
+$resultspath = "http://www.raven.anr.udel.edu/results.php?analysis=analysis_$analysisname";
 
 # Move folder from temp
 $commands .= "mv -f $analysispath $subdirectories/diffexpress_output/";
 
-$commands = $initialcommand.$commands;
+# generate the mail commands
+$premailcommand = 'echo "Your DiffExpress run with ID: '.$mytimeid.' has been started. Estimated time until completion is about 2 hours assuming no other server load. An email will be sent upon completion." | mail -s "fRNAkbox DiffExpress Run" '.$_SESSION['user_email']."\n";
+
+$postmailcommand = "\n".'if [ $? -eq 0 ]; then
+	echo "Your DiffExpress run with ID: '.$mytimeid.' completed successfully! You can view and download your data at '.$resultspath.' ." | mail -s "fRNAkbox DiffExpress Successful" '.$_SESSION['user_email'].' 
+else
+	echo "Your DiffExpress run with ID: '.$mytimeid.' was unsuccessful! Please email an administrator with your run ID and subject line \"fRNAkenstein error\"" | mail -s "fRNAkbox DiffExpress Unsuccessful" '.$_SESSION['user_email'].'
+fi';
+
+$commands = $premailcommand.$initialcommand.$commands.$postmailcommand;
 
 file_put_contents($bashfile, $commands, LOCK_EX);
 file_put_contents("$subdirectories/bash_scripts/r_$mytimeid.R", $rcommand, LOCK_EX);
 
-#}
 ?>
-
 
 </body>
 </html>

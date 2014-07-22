@@ -47,7 +47,7 @@ fRNAkenstein - Status
 <!link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
 </head>
-<body>
+<body >
 <center>
 <!--
 ############################
