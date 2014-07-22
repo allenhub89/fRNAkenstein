@@ -43,6 +43,9 @@ if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['afilename']))))){
 if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_GET['fafilename']))))){
 	exit("<h4>Error 4: No Fasta file selected</h4>");
 }
+if(empty(strip_tags (htmlspecialchars( escapeshellcmd($_POST['annotationtype']))))){
+	exit("<h4>Error 14: No annotation type selected</h4>");
+}
 
 ##################################
 # Grab values from HTML elements #
@@ -52,6 +55,7 @@ $fqarray = $_GET['fqfilename'];
 $procs = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['procs']))));
 $anno = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['afilename']))));
 $fa = strip_tags (htmlspecialchars( escapeshellcmd(htmlentities($_GET['fafilename']))));
+$annotype = strip_tags (htmlspecialchars( escapeshellcmd($_POST['annotationtype'])));
 
 ########################
 # Printing information #

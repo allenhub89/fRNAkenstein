@@ -148,7 +148,7 @@ if(count($fqfiles)<3){ #because of . and .. directories existing
 		# -> potentially old or modified data (bad, php!)
 		# This double checks that the element is in the new fqfiles array 
 		# to fix this minor annoying problem...
-		# Edit: I was an idiot, but I guess this still works
+		# Edit: I was an idiot (didn't know about as &$var), but I guess this still works
 		if (($key = array_search($fqfile, $fqfiles)) !== false) 
 		{
 			$doublestranded = 0;
@@ -288,6 +288,17 @@ echo "</div>";
 ?>
 
 <br>
+
+<!--
+#######################
+# Annotation Selector #
+#######################
+-->
+
+<h4> Annotation Type: </h4>
+<input type="radio" name="annotationtype" value="ncbi" checked>NCBI <br>
+<input type="radio" name="annotationtype" value="ensembl" >Ensembl <br>
+
 
 <!--
 ###########################
