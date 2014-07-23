@@ -86,7 +86,7 @@ input[type=text] {
 	text-transform:none;
 	width:200px;
 	background:-webkit-gradient(linear, left top, left 25, from(#FFF), color-stop(1%,#FFF), to(#d0eace));
-	background:-moz-linear-gradient(right, #EEEEEE, #d0eace); /* For Firefox 3.6 to 15 */
+	background:-moz-linear-gradient(right, #EEEDEE, #d0eace); /* For Firefox 3.6 to 15 */
 	color:#000;
 	font-size:.9em;
 }

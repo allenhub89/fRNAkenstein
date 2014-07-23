@@ -40,7 +40,7 @@ if(empty($_SESSION['user_name']) && !($_SESSION['user_is_logged_in']))
 
 <head>
 <title>
-fRNAkenstein - DiffExpress
+fRNAkenstein - DiffExpress Cruncher
 </title>
 <link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
@@ -214,7 +214,7 @@ function valthisform()
 
 <legend>
 <h3>
-fRNAkenstein - DiffExpress
+fRNAkenstein - DiffExpress Cruncher
 </h3>
 </legend>
 <form class="go-bottom" id='submitform' onsubmit="return valthisform(this);" action='/diffexpress_response.php' method='post' target='formresponse'>

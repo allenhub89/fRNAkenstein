@@ -194,9 +194,9 @@ The fRNAkenstein Pipeline
 
 <div id="dialog" style="display:none;" title="">
   <p></p>
-
-<p align="right"><font size="1">- Created by Allen Hubbard and Wayne Treible at the University of Delaware - </font></p>
 </div>
+
+
 </link>
 
 </fieldset>
