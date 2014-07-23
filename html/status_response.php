@@ -34,9 +34,13 @@ table
 {
 border:ridge;
 }
-th,td
+th
 {
 border:1px solid black;
+}
+th, td
+{
+/*border:1px solid black;*/
 padding:5px;
 }
 
@@ -85,7 +89,7 @@ $(document).ready(function() {
 
 <h2 style="opacity:0.8;">Process listing:</h2><br>
 <?php
-
+session_start();
 if(empty($_SESSION['user_name']) && !($_SESSION['user_is_logged_in']))
 {
   header('Location: index.php');
