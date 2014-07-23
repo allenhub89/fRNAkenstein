@@ -21,22 +21,23 @@ $subdirectories = "/var/www/subdirectories_for_interface";
 
 session_start();
 
-if(empty($_SESSION['user_name']))
+if(empty($_SESSION['user_name']) && !($_SESSION['user_is_logged_in']))
 {
   header('Location: index.php');
 }
+
 ########################
 # Captcha Verification #
 ########################
 
-require_once('recaptchalib.php');
+/*require_once('recaptchalib.php');
 $privatekey = "6LfK0PUSAAAAAP_PlDXSa_jlAxw7g0W7z7qMvcNM ";
 $resp = recaptcha_check_answer ($privatekey,
                         $_SERVER["REMOTE_ADDR"],
                         $_POST["recaptcha_challenge_field"],
                         $_POST["recaptcha_response_field"]);
 
-/*if (!$resp->is_valid) {
+if (!$resp->is_valid) {
 	#echo "<script language=\"javascript\">";
 	#echo "parent.location.reload();";
 	#echo "</script>";
@@ -429,7 +430,7 @@ $rcommand .= "write.table (as.data.frame(goodList), file=\"$rpath/edger.txt\") \
 
 # Compile all commands together
 $commands .= $cmcommand.$cdcommand;
-$commands .= $htseqcommand.$countmatrixcommand;
+$commands .= $countmatrixcommand;
 
 $commands .= "R --vanilla < $subdirectories/bash_scripts/r_$mytimeid.R &&\n";
 $commands .= "rm -f $subdirectories/bash_scripts/r_$mytimeid.R &&\n";

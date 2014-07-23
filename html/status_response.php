@@ -86,7 +86,7 @@ $(document).ready(function() {
 <h2 style="opacity:0.8;">Process listing:</h2><br>
 <?php
 
-if(!empty($_SESSION['user_name']))
+if(empty($_SESSION['user_name']) && !($_SESSION['user_is_logged_in']))
 {
   header('Location: index.php');
 }

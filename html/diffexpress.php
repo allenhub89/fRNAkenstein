@@ -30,7 +30,7 @@ session_start();
 $subdirectories = "/var/www/subdirectories_for_interface";
 
 
-if(empty($_SESSION['user_name']))
+if(empty($_SESSION['user_name']) && !($_SESSION['user_is_logged_in']))
 {
   header('Location: index.php');
 }
