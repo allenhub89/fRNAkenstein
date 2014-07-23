@@ -43,7 +43,7 @@ fRNAkenstein - MapCount Cruncher
 <link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
 </head>
-<body bgcolor="DarkGray">
+<body style="background: url(images/frnak.png) bottom left no-repeat fixed;">
 <center>
 <!--
 ############################

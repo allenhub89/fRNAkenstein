@@ -197,7 +197,7 @@ function valthisform()
 </script>
 
 </head>
-<body>
+<body style="background: url(images/frnak.png) bottom left no-repeat fixed;">
 <center>
 <!--
 ############################
@@ -214,9 +214,7 @@ function valthisform()
 
 <legend>
 <h3>
-<!img src="images/favicon.png" alt="fRNAk" width="24" height="24"> 
 fRNAkenstein - DiffExpress
-<!img src="images/favicon.png" alt="fRNAk" width="24" height="24">
 </h3>
 </legend>
 <form id='submitform' onsubmit="return valthisform(this);" action='/diffexpress_response.php' method='post' target='formresponse'>

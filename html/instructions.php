@@ -156,7 +156,7 @@ function point_it(event){
 
 
 </head>
-<body bgcolor="DarkGray">
+<body style="background-image:url('images/frnak.png');background-repeat:no-repeat;background-position:left bottom;">
 <center>
 <!--
 ###########################

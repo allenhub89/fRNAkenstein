@@ -33,7 +33,7 @@ fRNAkenstein:"Beware; for I am fearless, and therefore powerful."
 <!link rel="STYLESHEET" type="text/css" href="css_dir/background.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
 </head>
-<body bgcolor="DarkGray">
+<body style="background: url(images/frnak.png) bottom left no-repeat fixed;">
 <!simg src="images/chicken.jpg" alt="NSF" width="100" height="100"> 
 <center>
 <!--
