@@ -10,11 +10,14 @@ if(!($_SESSION['user_name'] == 'fRNAkadmin' || $_SESSION['user_name'] == 'toast'
 $logfilepath = "/var/log/apache2/error.log";
 
 $fh = fopen($logfilepath, 'r');
-$pageText = fread($fh, filesize($logfilepath));
+if($fh){
+	$pageText = fread($logfilepath, filesize($logfilepath));
 
-#converts newlines to <br>
-echo nl2br($pageText);
-
-echo "If this is empty, fRNAkenstein doesn't have access to the log file";
-
+	#converts newlines to <br>
+	echo nl2br($pageText);
+} 
+else
+{
+	echo "If this is empty, fRNAkenstein doesn't have access to the log file";
+}
 ?>
