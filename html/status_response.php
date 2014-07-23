@@ -1,6 +1,6 @@
 <head>
 <style type="text/css">
-#centercontainer {
+.centercontainer {
 	/* Internet Explorer 10 */
 	display:-ms-flexbox;
 	-ms-flex-pack:center;
@@ -12,14 +12,17 @@
 	-moz-box-align:center;
 
 	/* Safari, Opera, and Chrome */
-	display:-webkit-box;
+	/*display:-webkit-box;
 	-webkit-box-pack:center;
-	-webkit-box-align:center;
+	-webkit-box-align:center;*/
 
 	/* W3C */
 	display:box;
 	box-pack:center;
 	box-align:center;
+
+	display: inline-block;
+
 
 }
 .progress-label {
@@ -32,16 +35,62 @@
 
 table
 {
-border:ridge;
+//border: 1px solid #000;
 }
 th
 {
-border:1px solid black;
+border-bottom: 1px solid #000;
 }
 th, td
 {
 /*border:1px solid black;*/
 padding:5px;
+}
+
+.status
+{
+	border-radius: 100%;
+	margin:0px 10px;
+	border: 1px solid black;
+	width: 15px;
+	height: 15px;
+	float:center;
+}
+
+.queued
+{
+	background: yellow;
+}
+
+.running
+{
+	background:green;
+}
+
+.failed
+{
+	background:red;
+}
+
+.key
+{
+	float: left;
+	width: 15px;
+	text-align: left;
+	margin: 2px 2px;
+	margin-left:10px;
+	display: inline-block;
+}
+
+.keytext
+{
+	width: 80px;
+	float: left;
+	text-align: left;
+	margin: 2px 2px;
+	display: inline-block;
+	font-size:14px;
+	font:Times;
 }
 
 </style>
@@ -84,10 +133,9 @@ $(document).ready(function() {
 </head>
 
 <body>
-<div id="centercontainer">
-<center>
 
-<h2 style="opacity:0.8;">Process listing:</h2><br>
+<center>
+<br><br>
 <?php
 session_start();
 if(empty($_SESSION['user_name']) && !($_SESSION['user_is_logged_in']))
@@ -126,11 +174,7 @@ else {
 				array_push($files, $file);
 				$id = $match[2];
 				$type = $match[3];
-				echo "<td>$id</td><td>$type</td><td>USER</td><td>TIME</td><td><font color='green'><b>Running</b></font>!</td></tr>";
-				/*echo "<div id=\"progressbar\">";
-				echo "    <div class=\"progress-label\">0%</div>";
-				echo "</div>";
-				echo "</div><br><br><center>";*/
+				echo "<td>$id</td><td>$type</td><td>USER</td><td>TIME</td><td><div class='status running'></div></td></tr>";
 			}
 		}
 	}
@@ -152,7 +196,8 @@ else {
 							$type = $match[3];
 							if($id != '')
 							{
-								echo "<td>$id</td><td>$type</td><td>USER</td><td>TIME</td><td><font color='red'><b>Queued</b></font>!</td></tr>";
+								echo "<tr>";
+								echo "<td>$id</td><td>$type</td><td>USER</td><td>TIME</td><td><div class='status queued'></div></td></tr>";
 								unset($files[$file]);
 							}
 						}
@@ -167,7 +212,8 @@ else {
 						$type = $match[3];
 						if($id != '')
 						{
-							echo "<td>$id</td><td>$type</td><td>USER</td><td>TIME</td><td><font color='red'><b>Queued</b></font>!</td></tr>";
+							echo "<tr>";
+							echo "<td>$id</td><td>$type</td><td>USER</td><td>TIME</td><td><div class='status queued'></div></td></tr>";
 						}
 					}
 				}
@@ -197,9 +243,15 @@ function reloader()
 
 }
 </script>
+<br><br>
+<div class="centercontainer">
+<div class='status running key'></div><div class='keytext'>= Running</div>
+<div class='status queued key'> </div><div class='keytext'>= Queued</div>
+<div class='status failed key'></div><div class='keytext'>= Failed</div>
 
-<a href="" onclick="return reloader(event)"><h3 style="opacity:0.3;">Refresh to check status again.</h2></a><br>
-
+<br>
+<a href="" onclick="return reloader(event)"><h3 style="opacity:0.3;">Refresh to check status again</h2></a><br>
+</div>
 
 
 </center>

@@ -8,12 +8,16 @@
 <title>
 fRNAkenstein:"Beware; for I am fearless, and therefore powerful."
 </title>
+<link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
 <link rel="STYLESHEET" type="text/css" href="css_dir/buttonStyle.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
-
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+
+</head>
+<body style="background: url(images/frnak.png) bottom left no-repeat fixed;">
+<center>
 
 <!-- for coordinates -->
 <script language="JavaScript">
@@ -172,16 +176,14 @@ function point_it(event){
 <fieldset class="fieldset-auto-width">
 <legend>
 <h3>
-<!img src="/favicon.png" alt="fRNAk" width="24" height="24"> 
 The fRNAkenstein Pipeline
-<!img src="/favicon.png" alt="fRNAk" width="24" height="24">
 </h3>
 </legend>
 <h4>Click on an element for more information.</h4><br>
 <div id="pointer_div" onclick="point_it(event)" style = "background-image:url('images/flowchart.png');height:528;width:861">
 </div>
-<br>
-<font size="2">Click inside "Tophat and Cufflinks" or "DiffExpress" for stage instructions.</font>
+<br><div class='container'>
+<font size="2">Click inside "Tophat and Cufflinks" or "DiffExpress" for stage instructions.</font></div>
 <br> <br> <br> <br>
 <form action="menu.php">
     <input align = "bottom" type="submit" value="Return to Menu">
@@ -192,8 +194,10 @@ The fRNAkenstein Pipeline
 
 <div id="dialog" style="display:none;" title="">
   <p></p>
+
+<p align="right"><font size="1">- Created by Allen Hubbard and Wayne Treible at the University of Delaware - </font></p>
 </div>
+</link>
 
-
-
+</fieldset>
 </body>

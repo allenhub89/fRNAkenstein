@@ -217,7 +217,7 @@ function valthisform()
 fRNAkenstein - DiffExpress
 </h3>
 </legend>
-<form id='submitform' onsubmit="return valthisform(this);" action='/diffexpress_response.php' method='post' target='formresponse'>
+<form class="go-bottom" id='submitform' onsubmit="return valthisform(this);" action='/diffexpress_response.php' method='post' target='formresponse'>
 
 
 
@@ -235,10 +235,12 @@ fRNAkenstein - DiffExpress
 ##########################################################
 -->
 
+
 <tr style="padding:0px; margin:0px;">
-<th valign="top" align="left" style="padding-top:12px;padding-left:8px;width:300px">
+<td valign="top" align="left" style="padding-top:12px;padding-left:8px;width:300px">
 
 <div class='container'>
+
 <h4>Control Condition:</h4> <input type="text" name="controlcondition"><br>
 
 <?php
@@ -276,26 +278,22 @@ if(count($controllibs)<3){ #because of . and .. directories existing
 
 <br>
 
-</div>
-
 <!--
 ##############################
 # Archived Control Libraries #
 ##############################
 -->
 
-<div class='container'>
 <h4>Add archived control library:</h4> 
 
 <div id='ctrlholder' style='padding-bottom:10px'>
 
-
 </div>
+
 <input type="text" id="ctrltxt"> <button id="ctrlchk" type="button">+</button>
 
-</div>
 
-</th>
+</td>
 
 <!--
 ###############################################################
@@ -303,7 +301,7 @@ if(count($controllibs)<3){ #because of . and .. directories existing
 ###############################################################
 -->
 
-<th valign="top" align="left" style="padding-top:12px;padding-left:8px;width:300px">
+<td valign="top" align="left" style="padding-top:12px;padding-left:8px;width:300px">
 <div class='container'>
 
 <h4>Experimental Condition:</h4> <input type="text" name="expcondition"><br>
@@ -339,10 +337,8 @@ if(count($explibs)<3){ #because of . and .. directories existing
 	echo "</select>";
 }
 ?>
-
 <br>
 
-</div>
 
 
 <!--
@@ -351,7 +347,6 @@ if(count($explibs)<3){ #because of . and .. directories existing
 ##############################
 -->
 
-<div class='container'>
 <h4>Add archived experimental library:</h4> 
 
 <div id='expholder' style='padding-bottom:10px'>
@@ -360,9 +355,8 @@ if(count($explibs)<3){ #because of . and .. directories existing
 </div>
 <input type="text" id="exptxt"> <button id="expchk" type="button">+</button>
 
-</div>
 
-</th>
+</td>
 
 <!--
 #######################
@@ -387,14 +381,12 @@ if(count($explibs)<3){ #because of . and .. directories existing
 
 <tr style="padding:0px; margin:0px;">
 <td colspan="2" valign="top" style="padding-top:12px;padding-left:8px;width:600px">
-
+<div class='container'>
 <!--
 ######################################
 # Proc Selector Slider (JS onchange) #
 ######################################
 -->
-
-<div class='container'>
 
 <h4>Number of processors:</h4>
 <script>
@@ -408,18 +400,14 @@ function showVal(newVal){
 <div style="float:left;">&nbsp;processor(s)</div><br>
 
 <div style="height:30px;width:250px;float:left;">
-1<input name="procs" type="range" min="1" max="31" step="1" value="16" oninput="showVal(this.value)"> 31</div></div>
+1<input name="procs" type="range" min="1" max="31" step="1" value="16" oninput="showVal(this.value)"> 31</div>
 <br>
-
-</div>
 
 <!--
 ################################
 # Create DDBox for fasta files #
 ################################
 -->
-
-<div class='container'>
 
 <?php
 $fafiles = scandir("$subdirectories/fasta_directory"); 
@@ -441,15 +429,11 @@ if(count($fafiles)<3){ #because of . and .. directories existing
 
 ?>
 
-</div>
-
 <!--
 #####################################
 # Create DDBox for annotation files #
 #####################################
 -->
-
-<div class='container'>
 
 <?php
 
@@ -471,15 +455,14 @@ if(count($afiles)<3){ #because of . and .. directories existing
 }
 ?>
 
-</div>
-
 <!--
 #################
 # Analysis Name #
 #################
 -->
 
-<h4>Analysis Name:</h4> <input type="text" name="analysisname"><br>
+<h4>Analysis Name:</h4> <input type="text" id="analysisname" name="analysisname"> 
+<br>
 
 <!--
 #################
@@ -487,12 +470,12 @@ if(count($afiles)<3){ #because of . and .. directories existing
 #################
 -->
 
-<?php
+<!--<?php
 require_once('recaptchalib.php');
 $publickey = "6LfK0PUSAAAAANftfso7uj8OdyarzxH0zvst0Tmf"; 
 #echo "Finally... Prove you're not a robot!";
 #echo recaptcha_get_html($publickey);
-?>
+?>-->
 
 <br>
 
@@ -512,9 +495,7 @@ $publickey = "6LfK0PUSAAAAANftfso7uj8OdyarzxH0zvst0Tmf";
 ###########################
 -->
 
-<div class='container'>
-<button id = "crunch" type="submit">fRNAkenstein, Crunch!</button>
-</div>
+<button class="crunch" type="submit">fRNAkenstein, Crunch!</button>
 <br> <br> <br>
 
 </form>
@@ -522,7 +503,7 @@ $publickey = "6LfK0PUSAAAAANftfso7uj8OdyarzxH0zvst0Tmf";
     <input align="bottom" type="submit" value="Return to Menu">
 </form>
 </td>
-
+</div>
 </td>
 
 

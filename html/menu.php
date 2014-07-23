@@ -28,13 +28,11 @@ if(empty($_SESSION['user_name']) && !($_SESSION['user_is_logged_in']))
 <title>
 fRNAkenstein:"Beware; for I am fearless, and therefore powerful."
 </title>
-<!link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
+<link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
 <link rel="STYLESHEET" type="text/css" href="css_dir/buttonStyle.css">
-<!link rel="STYLESHEET" type="text/css" href="css_dir/background.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
 </head>
 <body style="background: url(images/frnak.png) bottom left no-repeat fixed;">
-<!simg src="images/chicken.jpg" alt="NSF" width="100" height="100"> 
 <center>
 <!--
 ###########################
@@ -96,7 +94,7 @@ using Tophat and Cufflinks from the Tuxedo Suite.
 </td>
 <td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
 <b>Step 3:</b> Calculate differential expression levels using an array of tools including 
-Cuffdiff, EdgeR, DESeq2, and Bayseq and combine the results.
+Cuffdiff, EdgeR, DESeq2, and Bayseq, then combine the results.
 </td>
 </tr>
 

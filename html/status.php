@@ -44,7 +44,7 @@ $subdirectories = "/var/www/subdirectories_for_interface";
 <title>
 fRNAkenstein - Status
 </title>
-<!link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
+<link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
 </head>
 <body style="background: url(images/frnak.png) bottom left no-repeat fixed;">
@@ -63,7 +63,7 @@ fRNAkenstein - Status
 <fieldset class="fieldset-auto-width">
 <legend>
 <h3>
-fRNAkenstein - Status
+fRNAkenstein - Process Listing
 </h3>
 </legend>
 

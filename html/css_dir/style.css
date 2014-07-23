@@ -1,107 +1,107 @@
-.iframe_container
+input,.container
 {
-  /*position:absolute;
-  right:0px;
-  margin-top:8px;
-  margin-left:2px;
-   border:1px solid #999;
-   width:360px;*/
-   
+  background-color:white;
 }
 
-#result_div h1
+select
 {
-   font-family : Arial, sans-serif;
-   font-size: 1.3em;
-   font-weight:bold;
-   color:#333;
+   color: #000;
+   font-size: 12px;
+   background: transparent;
+   /*-webkit-appearance: none;*/
 }
 
-#result_div p
-{
-   font-family : Arial, sans-serif;
-   font-size: .8em;
+button, option {
+  background-color: white;/*#d0eace;*/
 }
 
-#contactus fieldset
-{
-  border: 1px solid rgb(255,232,57);
-  width: 400px;
-  margin:auto;
-  text-align:center;
-  display: inline-block;
+input[type=radio] {
+	visibility: hidden;
 }
 
-#contactus legend, h2
-{
-   font-family : Arial, sans-serif;
-   font-size: 1.3em;
-   font-weight:bold;
-   color:#333;
+/**
+ * frnakRadio Buttons!
+ */
+.frnakRadio {
+	width: 24px;
+	height: 24px;
+	background: #ddd;
+	margin: 10px 10px;
+
+	border-radius: 100%;
+	position: relative;
+	-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+	box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
 }
 
-#contactus label
-{
-   font-family : Arial, sans-serif;
-   font-size:0.8em;
-   font-weight: bold;
+/**
+ * Create the checkbox button
+ */
+.frnakRadio label {
+	display: block;
+	width: 18px;
+	height: 18px;
+	border-radius: 100px;
+
+	-webkit-transition: all .5s ease;
+	-moz-transition: all .5s ease;
+	-o-transition: all .5s ease;
+	-ms-transition: all .5s ease;
+	transition: all .5s ease;
+	cursor: pointer;
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	z-index: 1;
+
+	background: #333;
+
+	-webkit-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+	box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
 }
 
-#contactus input[type="text"],textarea
-{
-  font-family : Arial, Verdana, sans-serif;
-  font-size: 0.8em;
-  line-height:140%;
-  color : #000; 
-  padding : 3px; 
-  border : 1px solid #333;
-
+/**
+ * Create the checked state
+ */
+.frnakRadio input[type=radio]:checked + label {
+	background: #26ca28;
 }
 
-#contactus input[type="text"]
+.checkname
 {
-  height:18px;
-  width:220px;
+	display: block;	
+	margin: 10px 35px;
 }
 
-#contactus #scaptcha
-{
-  width:60px;
-  height:18px;
+
+input[type=text] {
+	height:2.2em;
+	padding:5px 5px;
+	margin-bottom: 10px ;
+	border-radius:.75em;
+	-moz-border-radius:.5em;
+	-webkit-border-radius:.5em;
+	text-transform:none;
+	width:200px;
+	background:-webkit-gradient(linear, left top, left 25, from(#FFF), color-stop(1%,#FFF), to(#d0eace));
+	background:-moz-linear-gradient(right, #EEEEEE, #d0eace); /* For Firefox 3.6 to 15 */
+	color:#000;
+	font-size:.9em;
 }
 
-#contactus input[type="submit"]
-{
-   width:100px;
-   height:30px;
-   padding-left:0px;
+input[type=text]:focus{
+	box-shadow:1px 1px 10px #446;
+	outline:none;
 }
 
-#contactus textarea
+.crunch:hover
 {
-  height:120px;
-  width:310px;
+background-color: #d0eace;
+font-weight:bold;
 }
 
-#contactus input:focus,textarea:focus
-{
-  color : #009;
-  border : 1px solid #990000;
-  background-color : #ffff99;
-  font-weight:bold;
-}
 
-#contactus .container
-{
-   margin-top:8px;
-   margin-bottom: 10px;
-}
 
-#contactus .error
-{
-   font-family: Verdana, Arial, sans-serif; 
-   font-size: 0.7em;
-   color: #900;
-   background-color : #ffff00;
-}
 

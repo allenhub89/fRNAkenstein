@@ -196,15 +196,11 @@ echo "</select>";
 
 ?>
 
-</div>
-
 <!--
 ######################################
 # Proc Selector Slider (JS onchange) #
 ######################################
 -->
-
-<div class='container'>
 
 <h4>Number of processors:</h4>
 <script>
@@ -218,18 +214,14 @@ function showVal(newVal){
 <div style="float:left;">&nbsp;processor(s)</div><br>
 
 <div style="height:30px;width:250px;float:left;">
-1<input name="procs" type="range" min="1" max="31" step="1" value="16" oninput="showVal(this.value)"> 31</div></div>
+1<input name="procs" type="range" min="1" max="31" step="1" value="16" oninput="showVal(this.value)"> 31</div>
 <br>
-
-</div>
 
 <!--
 ################################
 # Create DDBox for fasta files #
 ################################
 -->
-
-<div class='container'>
 
 <?php
 $fafiles = scandir("$subdirectories/fasta_directory"); 
@@ -248,7 +240,6 @@ if(count($fafiles)<3){ #because of . and .. directories existing
 	} 
 	echo "</select>";
 }
-echo "</div>";
 
 
 ?>
@@ -258,8 +249,6 @@ echo "</div>";
 # Create DDBox for annotation files #
 #####################################
 -->
-
-<div class='container'>
 
 <?php
 
@@ -281,7 +270,6 @@ if(count($afiles)<3){ #because of . and .. directories existing
 	echo "</select>";
 }
 
-echo "</div>";
 ?>
 
 <!--
@@ -291,10 +279,17 @@ echo "</div>";
 -->
 
 <h4> Annotation Type: </h4>
-<input type="radio" name="annotationtype" value="ncbi" checked>NCBI <br>
-<input type="radio" name="annotationtype" value="ensembl" >Ensembl <br><br>
+<div class="frnakRadio">
+<div class="checkname">NCBI</div>
+<input type="radio" id="frnakRadioInput" name="annotationtype" value="ncbi" checked>
+<label for="frnakRadioInput"></label></div>
 
+<div class="frnakRadio">
+<div class="checkname">Ensembl</div>
+<input type="radio" id="frnakRadioInput2" name="annotationtype" value="ensembl" >
+<label for="frnakRadioInput2"></label></div>
 
+<br>
 <!--
 ###########################
 # Submit and Menu Buttons #
@@ -302,13 +297,14 @@ echo "</div>";
 -->
 
 <div class='container'>
-<button id = "crunch" type="submit">fRNAkenstein, Crunch!</button>
-</div>
+<button class="crunch" type="submit">fRNAkenstein, Crunch!</button>
+
 <br> <br> <br>
 </form>
 <form action="menu.php">
     <input align="bottom" type="submit" value="Return to Menu">
 </form>
+</div>
 </td>
 
 <!--
