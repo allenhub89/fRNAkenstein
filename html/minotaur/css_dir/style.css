@@ -1,0 +1,19 @@
+input,.container
+{
+  background-color:white;
+}
+
+select
+{
+   color: #000;
+   font-size: 12px;
+   background: transparent;
+   /*-webkit-appearance: none;*/
+}
+
+button, option {
+  background-color: white;/*#d0eace;*/
+}
+
+
+
