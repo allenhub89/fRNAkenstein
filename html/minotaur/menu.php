@@ -49,67 +49,67 @@ MInotauR:"Run to the passage while he storms, 'tis well that thou descend.."
 
 <table style="margin: 0px;">
 <tr>
-<th colspan="3" valign="middle" bgcolor="" style="border-bottom: 1px solid #000;padding-top:24px;padding-bottom:24px;padding-left:24px;padding-right:12px;width:500px;height=160px;">
-<img src="images/minotaur_banner.png" alt="MInotauR" width="550" style="" > </td>
+<th colspan="3" >
+<img src="images/minotaur_banner.png" alt="MInotauR" width="550" > </td>
 
 </th>
 </tr>
 
 <tr>
-<td valign="middle"  style="padding-top:24px;padding-left:8px;width:50px;">
+<td class="menu_button">
 <a href="instructions.php" class="minbutton">Instructions</a>
 
 </td>
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+<td class="menu_description">
 <b>Step 1:</b> Learn about MInotauR's included tools and 
 how to use the front-end interface step-by-step.
 </td>
 </tr>
 
 <tr>
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
-<a href="mapcount.php" class="minbutton">MapCount</a>
+<td class="menu_button">
+<a href="stage1.php" class="minbutton">Stageone</a>
 
 </td>
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+<td class="menu_description">
 <b>Step 2:</b> Align RNA sequencing reads to the reference file 
 using Tophat and Cufflinks from the Tuxedo Suite.
 </td>
 </tr>
 
 <tr>
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
+<td class="menu_button">
 <a href="diffexpress.php" class="minbutton">DiffExpress</a>
 </td>
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+<td class="menu_description">
 <b>Step 3:</b> Calculate differential expression levels using an array of tools including 
 Cuffdiff, EdgeR, DESeq2, and Bayseq, then combine the results.
 </td>
 </tr>
 
 <tr>
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
+<td class="menu_button">
 <a href="http://bigbird.anr.udel.edu/~sunliang/pathway/cyto.php" class="minbutton">Visualize Data</a>
 
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+<td class="menu_description">
 <b>Step 4:</b> Visualize differential expression 
 data using a variety of visualization tools. 
 </td>
 
 <tr>
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
+<td class="menu_button">
 <a href="status.php" class="minbutton">Status</a>
 
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+<td class="menu_description">
 View the various output and error logs of your data runs in real-time using the run ID provided in each tool.
 </td>
 </tr>
 
 <tr>
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:50px;">
+<td class="menu_button">
 <a href="contact.html" class="minbutton">About & Contact</a>
 
-<td valign="middle"  style="padding-top:12px;padding-left:8px;width:400px">
+<td class="menu_description">
 Contact information for the Fable team and references to the tools used.
 </td>
 </tr>

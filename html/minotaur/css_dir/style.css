@@ -1,3 +1,44 @@
+/**
+ * Menu Styles
+ */
+
+.fieldset-auto-width {
+	display: inline-block;
+}
+
+.menu_header
+{
+	vertical-align:middle;
+	background-color:#d0eace; 
+	padding-top:24px;
+	padding-bottom:24px;
+	padding-left:24px;
+	padding-right:12px;
+	width:500px;
+}
+.menu_button
+{
+	padding-top:12px;
+	padding-left:8px;
+	width:50px;
+	vertical-align:middle;
+}
+
+
+.menu_description
+{
+	padding-top:12px;
+	padding-left:8px;
+	width:400px;
+
+}
+
+.created_by
+{
+	display:inline-block;
+	float:right;
+}
+
 input,.container
 {
   background-color:white;
