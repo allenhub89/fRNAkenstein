@@ -43,18 +43,13 @@ fRNAkenstein - MapCount Cruncher
 <link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
 </head>
-<body style="background: url(images/frnak.png) bottom left no-repeat fixed;">
+<body>
 <center>
 <!--
 ############################
 # Beginning of submit form #
 ############################
 -->
-<style type="text/css">
-    .fieldset-auto-width {
-         display: inline-block;
-    }
-</style>
 <div>
 <fieldset class="fieldset-auto-width">
 <legend>
@@ -73,7 +68,7 @@ fRNAkenstein - MapCount Cruncher
 ################################
 -->
 
-<table style="margin: 0px;">
+<table>
 
 <!--
 ######################

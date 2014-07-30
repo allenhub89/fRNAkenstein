@@ -2,9 +2,9 @@
 	-moz-box-shadow:inset 0px 1px 50px 3px #000203;
 	-webkit-box-shadow:inset 0px 1px 50px 3px #000203;
 	box-shadow:inset 0px 1px 50px 3px #000203;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #E5E3FC), color-stop(1, #5c5c5c) );
-	background:-moz-linear-gradient( center top, #E5E3FC 5%, #5c5c5c 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#E5E3FC', endColorstr='#5c5c5c');
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #d0eace), color-stop(1, #5c5c5c) );
+	background:-moz-linear-gradient( center top, #d0eace 5%, #5c5c5c 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#d0eace', endColorstr='#5c5c5c');
 	background-color:#0fe000;
 	-webkit-border-top-left-radius:0px;
 	-moz-border-radius-topleft:0px;

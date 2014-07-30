@@ -197,7 +197,7 @@ function valthisform()
 </script>
 
 </head>
-<body style="background: url(images/frnak.png) bottom left no-repeat fixed;">
+<body>
 <center>
 <!--
 ############################

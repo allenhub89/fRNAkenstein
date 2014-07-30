@@ -39,22 +39,24 @@ MInotauR:"Run to the passage while he storms, 'tis well that thou descend.."
 # Formatting Box & Legend #
 ###########################
 -->
-<style type="text/css">
-    .fieldset-auto-width {
-         display: inline-block;
-    }
-</style>
 <div>
-<!fieldset class="fieldset-auto-width">
-
 <table style="margin: 0px;">
 <tr>
 <th colspan="3" >
-<img src="images/minotaur_banner.png" alt="MInotauR" width="550" > </td>
+<img src="images/minotaur_banner.png" alt="MInotauR" width="550" > </td> <br> <br>
 
 </th>
 </tr>
+<tr>
+<td colspan="3" class="menu_header">
 
+A lightweight, clean, and easy-to-use interface for RNA sequencing 
+and differential expression using state-of-the-art tools to turn
+your data into visible results.
+<div align="right">-The fRNAkenstein Team </div>
+
+</td>
+</tr>
 <tr>
 <td class="menu_button">
 <a href="instructions.php" class="minbutton">Instructions</a>

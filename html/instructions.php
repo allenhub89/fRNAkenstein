@@ -16,7 +16,6 @@ fRNAkenstein:"Beware; for I am fearless, and therefore powerful."
 <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 
 </head>
-<body style="background: url(images/frnak.png) bottom left no-repeat fixed;">
 <center>
 
 <!-- for coordinates -->
@@ -160,7 +159,7 @@ function point_it(event){
 
 
 </head>
-<body style="background-image:url('images/frnak.png');background-repeat:no-repeat;background-position:left bottom;">
+<body>
 <center>
 <!--
 ###########################

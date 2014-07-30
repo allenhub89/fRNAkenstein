@@ -243,11 +243,7 @@ function reloader()
 
 }
 </script>
-<br><br>
-<div class="centercontainer">
-<div class='status running key'></div><div class='keytext'>= Running</div>
-<div class='status queued key'> </div><div class='keytext'>= Queued</div>
-<div class='status failed key'></div><div class='keytext'>= Failed</div>
+
 
 <br>
 <a href="" onclick="return reloader(event)"><h3 style="opacity:0.3;">Refresh to check status again</h2></a><br>

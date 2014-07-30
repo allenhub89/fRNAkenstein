@@ -47,20 +47,14 @@ fRNAkenstein - Status
 <link rel="STYLESHEET" type="text/css" href="css_dir/style.css">
 <link rel="icon" type="image/ico" href="images/favicon.ico"/>
 </head>
-<body style="background: url(images/frnak.png) bottom left no-repeat fixed;">
+<body>
 <center>
 <!--
 ############################
 # Beginning of submit form #
 ############################
 -->
-<style type="text/css">
-    .fieldset-auto-width {
-         display: inline-block;
-    }
-</style>
 <div>
-<fieldset class="fieldset-auto-width">
 <legend>
 <h3>
 fRNAkenstein - Process Listing
@@ -81,7 +75,11 @@ fRNAkenstein - Process Listing
 # Submit and Queue Buttons #
 ############################
 -->
-
+<br><br>
+<div class="centercontainer">
+<div class='status running key'></div><div class='keytext'>= Running</div>
+<div class='status queued key'> </div><div class='keytext'>= Queued</div>
+<div class='status failed key'></div><div class='keytext'>= Failed</div>
 <br> <br> 
 <form action="menu.php">
     <input align = "bottom" type="submit" value="Return to Menu">
@@ -101,7 +99,6 @@ fRNAkenstein - Process Listing
 </table>
 </link>
 <p align="right"><font size="1">- Created by Allen Hubbard and Wayne Treible at the University of Delaware - </font></p>
-</fieldset>
 </body>
 
 

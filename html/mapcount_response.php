@@ -9,7 +9,7 @@
 #   --annotation_directory/        #
 #   --temp_output/                 #
 #   --bash_scripts/                #
-#   --mapcount_output/                 #
+#   --mapcount_output/             #
 #   --logs/                        #
 #                                  #
 # Modify $subdirectories to change #
@@ -124,6 +124,9 @@ foreach($fqarray as $fqoriginal) {
 	$fqdoublestranded = explode("&", $fqoriginal);
 	# don't like this but it needs to be done for clarity below
 	$fq = $fqdoublestranded[0];
+	
+	# To make sure HTSeq command is stranded/unstranded as well
+	$htseqstranded = "no";
 
 	# Check if fastq file is zipped
 	if (preg_match("/\.gz/", $fq)!=1 ){
@@ -146,6 +149,9 @@ foreach($fqarray as $fqoriginal) {
 				$fqpath2strand = "$temppath/$fq2";
 				$fqpath = $fqpath." ".$fqpath2strand;
 			}
+			
+			# this is stranded for htseq also
+			$htseqstranded = "yes";
 		}
 		# Otherwise, it's just equal to the one fastq filepath
 		else{
@@ -187,11 +193,11 @@ foreach($fqarray as $fqoriginal) {
 		$htseqcommand = "samtools view -h -o $sampath/$library.sam $thoutputfile/accepted_hits.bam &&\n";
 		if ($annotype == "ncbi") 
 		{
-			$htseqcommand = $htseqcommand."htseq-count -t gene -i gene $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n";
+			$htseqcommand = $htseqcommand."htseq-count -t gene -i gene -s ".$htseqstranded." $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n";
 		}
 		else if ($annotype == "ensembl")
 		{
-			$htseqcommand = $htseqcommand."htseq-count -t gene -i Name $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n"; 
+			$htseqcommand = $htseqcommand."htseq-count -t gene -i Name -s ".$htseqstranded." $sampath/$library.sam $annopath > $htseqpath/$library.counts &&\n"; 
 		}
 
 		# Move temp files to output directory only after the library has been crunched
