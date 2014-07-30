@@ -55,6 +55,7 @@ fRNAkenstein - Status
 ############################
 -->
 <div>
+<fieldset class="fieldset-auto-width">
 <legend>
 <h3>
 fRNAkenstein - Process Listing
@@ -99,6 +100,7 @@ fRNAkenstein - Process Listing
 </table>
 </link>
 <p align="right"><font size="1">- Created by Allen Hubbard and Wayne Treible at the University of Delaware - </font></p>
+</fieldset>
 </body>
 
 
